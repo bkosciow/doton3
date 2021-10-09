@@ -1,0 +1,22 @@
+#kivy 2.0
+<LabelBorder>
+    border_width: 1
+    border_color_movement: 1, 0, 0, 1
+    border_color_nomovement: 0.5, 0.5, 0.5, 1
+    background_color_light: 0.9, 1, 0.6, 1
+    background_color_nolight: 0.1, 0.1, 0.1, 1
+    movement: 0
+    light: 0
+    relay: 0
+    canvas.before:
+        Color:
+            rgba: self.border_color_movement if self.movement else self.border_color_nomovement
+        Line:
+            width: 2
+            rectangle: self.x+2, self.y+2, self.width-4, self.height-4
+        Color:
+            rgba: self.background_color_light if self.light else self.background_color_nolight
+        Rectangle:
+            size: self.width-4, self.height-4
+            pos: self.x+2, self.y+2
+    color: (0,0,0,1) if self.light else (1,1,1,1)
