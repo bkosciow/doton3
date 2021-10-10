@@ -7,6 +7,7 @@ Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep
 
 
 class Home(Widget, StackLayout):
+
     def update_values(self, values, name):
         name = name.replace("node-", "")
         # print(values, name)

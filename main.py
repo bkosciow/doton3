@@ -23,7 +23,7 @@ listener = Listener(config.get('grpc.address'))
 
 class DotonApp(App):
     def build(self):
-        home = Home()
+        home = Home(pos=(440, 250))
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
         listener.add_widget('node-north', home)
