@@ -1,11 +1,12 @@
 from kivy.uix.stacklayout import StackLayout
 from kivy.lang import Builder
 import pathlib
+from service.widget import Widget
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'home.kv')
 
 
-class Home(StackLayout):
+class Home(Widget, StackLayout):
     def update_values(self, values, name):
         name = name.replace("node-", "")
         print(values, name)

@@ -2,7 +2,7 @@
 import abc
 
 
-class Widget(metaclass=abc.ABCMeta):
+class Widget():
 
     @abc.abstractmethod
     def update_values(self, values, name):
