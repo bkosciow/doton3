@@ -1,0 +1,24 @@
+#kivy 2.0
+
+<WeatherCloudiness>
+    value: 0
+    img_width: 30
+    canvas:
+        Rectangle:
+            pos: self.x, self.y + 10
+            size: 30,16
+            source: 'assets/image/openweather/cloud_empty.png'
+        StencilPush
+        Rectangle:
+            pos: self.x, self.y
+            size: self.img_width * self.value / 100, self.height
+        StencilUse
+        Rectangle:
+            pos: self.x, self.y + 10
+            size: 30,16
+            source: 'assets/image/openweather/cloud_full.png'
+        StencilUnUse
+            Rectangle:
+                pos: self.x, self.y
+                size: self.img_width * self.value / 100, self.height
+        StencilPop

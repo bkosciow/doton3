@@ -14,7 +14,7 @@ class AirQuality(Widget, StackLayout):
         super(StackLayout, self).__init__(**kwargs)
 
     def update_values(self, values, name):
-        print(values, name)
+        # print(values, name)
         current = {
             'PM25': None,
             'PM10': None,

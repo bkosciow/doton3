@@ -1,0 +1,12 @@
+<ImageRotate>
+    allow_stretch: 1
+    keep_ratio: 1
+    angle: 0
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: self.angle
+            axis: 0, 0, 1
+            origin: root.center
+    canvas.after:
+        PopMatrix
