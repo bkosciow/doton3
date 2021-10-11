@@ -28,7 +28,7 @@ class DotonApp(App):
     def build(self):
         layout = FloatLayout(size=(800, 480))
 
-        home = Home(pos=(440, 250))
+        home = Home(pos=(490, 280))
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
 
