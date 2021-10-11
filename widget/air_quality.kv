@@ -1,0 +1,175 @@
+#kivy 2.0
+
+<AirQuality>
+    orientation: 'lr-tb'
+    size_hint: (None, None)
+    size: (200, 100)
+    pos: 0, 0
+
+    Label:
+        id: pm25
+        text: 'Pm2.5'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: pm25_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: pm25_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: pm25_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: pm25_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: pm25_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: pm25_5
+        enabled_color: 0.5, 0, 0, 1
+
+    Label:
+        id: pm10
+        text: 'Pm10'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: pm10_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: pm10_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: pm10_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: pm10_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: pm10_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: pm10_5
+        enabled_color: 0.5, 0, 0, 1
+
+    Label:
+        id: so2
+        text: 'SO2'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: so2_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: so2_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: so2_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: so2_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: so2_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: so2_5
+        enabled_color: 0.5, 0, 0, 1
+
+    Label:
+        id: o3
+        text: 'O3'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: o3_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: o3_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: o3_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: o3_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: o3_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: o3_5
+        enabled_color: 0.5, 0, 0, 1
+
+    Label:
+        id: co
+        text: 'CO'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: co_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: co_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: co_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: co_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: co_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: co_5
+        enabled_color: 0.5, 0, 0, 1
+
+    Label:
+        id: no2
+        text: 'NO2'
+        size_hint: 0.4, 0.16
+        font_size: 14
+        bold: 1
+        canvas.before:
+            Color:
+                rgba: (1,1,1,1)
+    AirIndicator:
+        id: no2_0
+        enabled_color: 0, 127/255.0, 14/255, 1
+    AirIndicator:
+        id: no2_1
+        enabled_color: 0, 209/255.0, 14/255, 1
+    AirIndicator:
+        id: no2_2
+        enabled_color: 1, 216/255.0, 0, 1
+    AirIndicator:
+        id: no2_3
+        enabled_color: 1, 106/255.0, 0, 1
+    AirIndicator:
+        id: no2_4
+        enabled_color: 1, 0, 0, 1
+    AirIndicator:
+        id: no2_5
+        enabled_color: 0.5, 0, 0, 1

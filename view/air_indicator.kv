@@ -1,0 +1,13 @@
+#kivy 2.0
+<AirIndicator>
+    enabled_color: 1,1,1,1
+    disabled_color: 0,0,0,1
+    enabled: 1
+    text: ''
+    size_hint: 0.10, 0.1
+    canvas.before:
+        Color:
+            rgba: self.enabled_color if self.enabled else self.disabled_color
+        Rectangle:
+            pos: self.x, self.y
+            size: self.width, self.height

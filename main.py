@@ -9,11 +9,14 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.floatlayout import FloatLayout
 from service.config import Config
 from connector.listener import Listener
 import service.comm as comm
 from view.label_border import LabelBorder
+from view.air_indicator import AirIndicator
 from widget.home import Home
+from widget.air_quality import AirQuality
 from service.exceptions import *
 
 config = Config()
@@ -23,13 +26,25 @@ listener = Listener(config.get('grpc.address'))
 
 class DotonApp(App):
     def build(self):
+        layout = FloatLayout(size=(800, 480))
+
         home = Home(pos=(440, 250))
+        # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
+        air_quality = AirQuality(pos=(0, 350))
+
+        layout.add_widget(home)
+        layout.add_widget(air_quality)
+
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
         listener.add_widget('node-north', home)
+
+        listener.add_widget('openaq', air_quality)
+
         listener.start()
+
+        return layout
         # Clock.schedule_interval(home.update, 5.0)
-        return home
 
     def on_request_close(self, *args):
         print("HALTING")
