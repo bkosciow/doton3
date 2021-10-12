@@ -1,0 +1,131 @@
+#kivy 2.0
+
+<Weather>
+    orientation: 'lr-tb'
+    size_hint: (None, None)
+    size: 250, 180
+    pos: 110, 120
+    canvas.before:
+        Color:
+            rgb: 64/255, 64/255, 64/255
+        Rectangle:
+            size: (self.width / 2), 90
+            pos: self.x-5, self.y + 90
+            source: 'assets/image/openweather/rounded_box.png'
+        Rectangle:
+            size: (self.width / 2), 90
+            pos: self.x + (self.width / 2) + 5,  self.y + 90
+            source: 'assets/image/openweather/rounded_box.png'
+        Rectangle:
+            size: (self.width), 88
+            pos: self.x,  self.y
+            source: 'assets/image/openweather/rounded_big_box.png'
+        Color:
+            rgb: 1, 0, 0
+
+    ImageRotate:
+        size_hint: 0.10, 0.2
+        source: 'assets/image/openweather/wind_arrow.png'
+        allow_stretch: 1
+        keep_ratio: 1
+        angle: -77
+    Label:
+        size_hint: 0.15, 0.2
+        text: "25"
+        font_size: 16
+        bold: 1
+    WeatherCloudiness:
+        size_hint: 0.15, 0.2
+        value: 50
+    Label:
+        size_hint: 0.2, 0.2
+    ImageRotate:
+        size_hint: 0.10, 0.2
+        source: 'assets/image/openweather/wind_arrow.png'
+        angle: 23
+    Label:
+        size_hint: 0.15, 0.2
+        text: "5"
+        font_size: 16
+        bold: 1
+    WeatherCloudiness:
+        size_hint: 0.15, 0.2
+        value: 10
+
+
+    WeatherHumidity:
+        size_hint: 0.05, 0.3
+        value: 50
+    Image:
+        size_hint: 0.2, 0.3
+        id: current_icon
+        source: 'assets/image/openweather/201.png'
+        size: self.texture_size
+    Label:
+        size_hint: 0.2, 0.3
+        text: "27"
+        font_size: 34
+        bold: 1
+        color: 1, 106/255.0, 0, 1
+    Label:
+        size_hint: 0.1, 0.3
+    WeatherHumidity:
+        size_hint: 0.05, 0.3
+        value: 10
+    Image:
+        size_hint: 0.2, 0.3
+        id: current_icon
+        source: 'assets/image/openweather/301.png'
+        size: self.texture_size
+    Label:
+        size_hint: 0.2, 0.3
+        text: "-18"
+        font_size: 34
+        bold: 1
+        color: 46/255, 144/255, 193/255, 1
+
+
+    Image:
+        size_hint: 0.33, 0.3
+        source: 'assets/image/openweather/200.png'
+        size: self.texture_size
+        halign: "center"
+        valign: "middle"
+    Image:
+        size_hint: 0.33, 0.3
+        size: self.texture_size
+        source: 'assets/image/openweather/202.png'
+        size: self.texture_size
+        halign: "center"
+        valign: "middle"
+    Image:
+        size_hint: 0.34, 0.3
+        source: 'assets/image/openweather/210.png'
+        size: self.texture_size
+        halign: "center"
+        valign: "middle"
+
+    Label:
+        size_hint: 0.33, 0.2
+        text: "2"
+        color: 1, 106/255.0, 0, 1
+        font_size: 30
+        bold: 1
+        halign: "right"
+        valign: "middle"
+    Label:
+        size_hint: 0.33, 0.2
+        text: "-2"
+        color: 46/255, 144/255, 193/255, 1
+        font_size: 30
+        bold: 1
+        halign: "center"
+        valign: "middle"
+    Label:
+        size_hint: 0.34, 0.2
+        text: "-20"
+        color: 46/255, 144/255, 193/255, 1
+        font_size: 30
+        bold: 1
+        halign: "center"
+        valign: "middle"
