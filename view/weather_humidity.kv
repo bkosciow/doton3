@@ -1,0 +1,24 @@
+#kivy 2.0
+
+<WeatherHumidity>
+    value: 0
+    img_height: 20
+    canvas:
+        Rectangle:
+            pos: self.x, self.y + 20
+            size: 14,20
+            source: 'assets/image/openweather/drop_empty.png'
+        StencilPush
+        Rectangle:
+            pos: self.x, self.y
+            size: self.width, 19 + (self.img_height * self.value / 100)
+        StencilUse
+        Rectangle:
+            pos: self.x, self.y + 20
+            size: 14,20
+            source: 'assets/image/openweather/drop_full.png'
+        StencilUnUse
+            Rectangle:
+                pos: self.x, self.y
+                size: self.width, 19 + (self.img_height * self.value / 100)
+        StencilPop

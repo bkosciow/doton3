@@ -20,6 +20,7 @@ from view.label_border import LabelBorder
 from view.air_indicator import AirIndicator
 from view.image_rotate import ImageRotate
 from view.weather_cloudiness import WeatherCloudiness
+from view.weather_humidity import WeatherHumidity
 from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
