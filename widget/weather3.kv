@@ -24,19 +24,22 @@
             rgb: 1, 0, 0
 
     ImageRotate:
+        id: current_wind_icon
         size_hint: 0.10, 0.2
         source: 'assets/image/openweather/wind_arrow.png'
         allow_stretch: 1
         keep_ratio: 1
-        angle: -77
+        angle: 0
     Label:
+        id: current_wind_label
         size_hint: 0.15, 0.2
-        text: "25"
+        text: "--"
         font_size: 16
         bold: 1
     WeatherCloudiness:
+        id: current_cloudiness
         size_hint: 0.15, 0.2
-        value: 50
+        value: 0
     Label:
         size_hint: 0.2, 0.2
     ImageRotate:
@@ -54,51 +57,57 @@
 
 
     WeatherHumidity:
+        id: current_humidity
         size_hint: 0.05, 0.3
         value: 50
-    Image:
+    AsyncImage:
+        id: current_icon
         size_hint: 0.2, 0.3
         id: current_icon
         source: 'assets/image/openweather/201.png'
         size: self.texture_size
+        nocache: 1
     Label:
+        id: current_temperature
         size_hint: 0.2, 0.3
-        text: "27"
+        text: "--"
         font_size: 34
         bold: 1
         color: 1, 106/255.0, 0, 1
     Label:
         size_hint: 0.1, 0.3
     WeatherHumidity:
+        id: today_humidity
         size_hint: 0.05, 0.3
-        value: 10
-    Image:
+        value: 0
+    AsyncImage:
         size_hint: 0.2, 0.3
-        id: current_icon
+        id: today_icon
         source: 'assets/image/openweather/301.png'
         size: self.texture_size
     Label:
+        id: today_temperature_max
         size_hint: 0.2, 0.3
-        text: "-18"
+        text: "--"
         font_size: 34
         bold: 1
         color: 46/255, 144/255, 193/255, 1
 
 
-    Image:
+    AsyncImage:
         size_hint: 0.33, 0.3
         source: 'assets/image/openweather/200.png'
         size: self.texture_size
         halign: "center"
         valign: "middle"
-    Image:
+    AsyncImage:
         size_hint: 0.33, 0.3
         size: self.texture_size
         source: 'assets/image/openweather/202.png'
         size: self.texture_size
         halign: "center"
         valign: "middle"
-    Image:
+    AsyncImage:
         size_hint: 0.34, 0.3
         source: 'assets/image/openweather/210.png'
         size: self.texture_size

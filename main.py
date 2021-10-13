@@ -50,7 +50,7 @@ class DotonApp(App):
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
         listener.add_widget('node-north', home)
-
+        listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
 
         listener.start()
