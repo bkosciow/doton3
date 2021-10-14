@@ -42,7 +42,7 @@ class DotonApp(App):
         home = Home(pos=(490, 280))
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
-        weather = Weather()
+        weather = Weather(pos=(220, 290))
 
         layout.add_widget(home)
         layout.add_widget(air_quality)

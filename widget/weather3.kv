@@ -4,7 +4,7 @@
     orientation: 'lr-tb'
     size_hint: (None, None)
     size: 250, 180
-    pos: 110, 120
+    pos: 0, 0
     canvas.before:
         Color:
             rgb: 64/255, 64/255, 64/255
@@ -91,47 +91,78 @@
         font_size: 34
 
 
+    ImageRotate:
+        id: day1_wind_icon
+        size_hint: 0.06, 0.2
+        source: 'assets/image/openweather/wind_arrow.png'
+        angle: 0
     AsyncImage:
         id: day1_icon
-        size_hint: 0.33, 0.3
+        size_hint: 0.24, 0.3
         source: 'assets/image/openweather/803.png'
         size: self.texture_size
-        halign: "center"
-        valign: "middle"
+    Label:
+        size_hint: 0.05, 0.3
+    ImageRotate:
+        id: day1_wind_icon
+        size_hint: 0.06, 0.2
+        source: 'assets/image/openweather/wind_arrow.png'
+        angle: 0
     AsyncImage:
         id: day2_icon
-        size_hint: 0.33, 0.3
+        size_hint: 0.24, 0.3
         size: self.texture_size
         source: 'assets/image/openweather/803.png'
         size: self.texture_size
-        halign: "center"
-        valign: "middle"
+    Label:
+        size_hint: 0.05, 0.3
+    ImageRotate:
+        id: day1_wind_icon
+        size_hint: 0.06, 0.2
+        source: 'assets/image/openweather/wind_arrow.png'
+        angle: 0
     AsyncImage:
         id: day3_icon
-        size_hint: 0.34, 0.3
+        size_hint: 0.24, 0.3
         source: 'assets/image/openweather/803.png'
         size: self.texture_size
-        halign: "center"
-        valign: "middle"
 
+
+    Label:
+        size_hint: 0.03, 0.1
     WeatherTemperature:
         id: day1_temperature_max
-        size_hint: 0.33, 0.2
-        font_size: 30
+        size_hint: 0.15, 0.1
+        font_size: 28
         bold: 1
-        halign: "right"
-        valign: "middle"
+    WeatherTemperature:
+        id: day1_temperature_min
+        size_hint: 0.15, 0.2
+        font_size: 20
+        bold: 1
+
+    Label:
+        size_hint: 0.03, 0.1
     WeatherTemperature:
         id: day2_temperature_max
-        size_hint: 0.33, 0.2
-        font_size: 30
+        size_hint: 0.15, 0.1
+        font_size: 28
         bold: 1
-        halign: "center"
-        valign: "middle"
+    WeatherTemperature:
+        id: day2_temperature_min
+        size_hint: 0.15, 0.2
+        font_size: 20
+        bold: 1
+
+    Label:
+        size_hint: 0.03, 0.1
     WeatherTemperature:
         id: day3_temperature_max
-        size_hint: 0.34, 0.2
-        font_size: 30
+        size_hint: 0.15, 0.1
+        font_size: 28
         bold: 1
-        halign: "center"
-        valign: "middle"
+    WeatherTemperature:
+        id: day3_temperature_min
+        size_hint: 0.15, 0.2
+        font_size: 20
+        bold: 1
