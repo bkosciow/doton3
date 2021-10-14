@@ -43,15 +43,18 @@
     Label:
         size_hint: 0.2, 0.2
     ImageRotate:
+        id: day0_wind_icon
         size_hint: 0.10, 0.2
         source: 'assets/image/openweather/wind_arrow.png'
         angle: 23
     Label:
+        id: day0_wind_label
         size_hint: 0.15, 0.2
-        text: "5"
+        text: "--"
         font_size: 16
         bold: 1
     WeatherCloudiness:
+        id: day0_cloudiness
         size_hint: 0.15, 0.2
         value: 10
 
@@ -67,73 +70,67 @@
         source: 'assets/image/openweather/201.png'
         size: self.texture_size
         nocache: 1
-    Label:
+    WeatherTemperature:
         id: current_temperature
         size_hint: 0.2, 0.3
-        text: "--"
         font_size: 34
-        bold: 1
-        color: 1, 106/255.0, 0, 1
     Label:
         size_hint: 0.1, 0.3
     WeatherHumidity:
-        id: today_humidity
+        id: day0_humidity
         size_hint: 0.05, 0.3
         value: 0
     AsyncImage:
+        id: day0_icon
         size_hint: 0.2, 0.3
-        id: today_icon
         source: 'assets/image/openweather/301.png'
         size: self.texture_size
-    Label:
-        id: today_temperature_max
+    WeatherTemperature:
+        id: day0_temperature_max
         size_hint: 0.2, 0.3
-        text: "--"
         font_size: 34
-        bold: 1
-        color: 46/255, 144/255, 193/255, 1
 
 
     AsyncImage:
+        id: day1_icon
         size_hint: 0.33, 0.3
-        source: 'assets/image/openweather/200.png'
+        source: 'assets/image/openweather/803.png'
         size: self.texture_size
         halign: "center"
         valign: "middle"
     AsyncImage:
+        id: day2_icon
         size_hint: 0.33, 0.3
         size: self.texture_size
-        source: 'assets/image/openweather/202.png'
+        source: 'assets/image/openweather/803.png'
         size: self.texture_size
         halign: "center"
         valign: "middle"
     AsyncImage:
+        id: day3_icon
         size_hint: 0.34, 0.3
-        source: 'assets/image/openweather/210.png'
+        source: 'assets/image/openweather/803.png'
         size: self.texture_size
         halign: "center"
         valign: "middle"
 
-    Label:
+    WeatherTemperature:
+        id: day1_temperature_max
         size_hint: 0.33, 0.2
-        text: "2"
-        color: 1, 106/255.0, 0, 1
         font_size: 30
         bold: 1
         halign: "right"
         valign: "middle"
-    Label:
+    WeatherTemperature:
+        id: day2_temperature_max
         size_hint: 0.33, 0.2
-        text: "-2"
-        color: 46/255, 144/255, 193/255, 1
         font_size: 30
         bold: 1
         halign: "center"
         valign: "middle"
-    Label:
+    WeatherTemperature:
+        id: day3_temperature_max
         size_hint: 0.34, 0.2
-        text: "-20"
-        color: 46/255, 144/255, 193/255, 1
         font_size: 30
         bold: 1
         halign: "center"

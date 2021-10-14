@@ -1,0 +1,8 @@
+#kivy 2.0
+
+<WeatherTemperature>
+    plus_color: 1, 106/255.0, 0, 1
+    minus_color: 46/255, 144/255, 193/255, 1
+    bold: 1
+    text: "--"
+    color: self.plus_color if self.text == "--" or int(self.text) > 0 else self.minus_color
