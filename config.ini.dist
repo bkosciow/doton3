@@ -8,5 +8,5 @@ encoder_params=abcdef2345678901,2345678901abcdef,0123456789abcdef,mypassphrase
 ip=192.168.1.255
 port=5053
 
-[grpc]
-address=192.168.1.202:8765
+[socket]
+address=192.168.1.202:8764

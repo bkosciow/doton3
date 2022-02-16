@@ -14,7 +14,7 @@ from kivy.uix.stacklayout import StackLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from service.config import Config
-from connector.listener import Listener
+from socket_conn.listener import Listener
 import service.comm as comm
 from view.label_border import LabelBorder
 from view.air_indicator import AirIndicator
@@ -29,7 +29,7 @@ from service.exceptions import *
 
 config = Config()
 comm.address = (config.get("message.ip"), int(config.get("message.port")))
-listener = Listener(config.get('grpc.address'))
+listener = Listener(config.get('socket.address'))
 
 
 # class ImageCloud(StencilView):
