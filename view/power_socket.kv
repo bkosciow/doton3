@@ -1,0 +1,12 @@
+#kivy 2.0
+<PowerSocket>
+    enabled: 1
+    text: ''
+    size_hint: None, None
+    image_on: 'assets/image/nodeone/socket_on.png'
+    image_off: 'assets/image/nodeone/socket_off.png'
+    canvas:
+        Rectangle:
+            pos: self.parent.pos[0] + self.x, self.parent.pos[1] + self.y
+            size: 20, 21
+            source: self.image_on if self.enabled == 1 else self.image_off

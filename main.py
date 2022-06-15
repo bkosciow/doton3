@@ -22,6 +22,7 @@ from view.image_rotate import ImageRotate
 from view.weather_cloudiness import WeatherCloudiness
 from view.weather_humidity import WeatherHumidity
 from view.weather_temperature import WeatherTemperature
+from view.power_socket import PowerSocket
 from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
