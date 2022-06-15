@@ -7,7 +7,6 @@ Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep
 
 
 class Home(Widget, StackLayout):
-
     def update_values(self, values, name):
         name = name.replace("node-", "")
         # print(values, name)
@@ -18,4 +17,10 @@ class Home(Widget, StackLayout):
                 self.ids[name].light = int(values['light'])
             if "pir" in values:
                 self.ids[name].movement = int(values['pir'])
-
+            if "relay" in values:
+                idx = 0
+                for v in values['relay']:
+                    name = "relay-" + name + "-" + str(idx)
+                    if name in self.ids:
+                        self.ids[name].enabled = int(v)
+                    idx += 1
