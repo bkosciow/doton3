@@ -1,0 +1,37 @@
+#kivy 2.0
+
+<Printer3D>
+    orientation: 'lr-tb'
+    size_hint: (None, None)
+    pos: 0, 0
+    size: 110, 150
+    background_color: 0.1, 0.1, 0.1, 1
+    printing_color: 0.1, 1, 0.1, 1
+    printing_error_color: 1, 0, 0, 1
+    error: 0
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            size: self.width-4, self.height-4
+            pos: self.x+2, self.y+2
+    Label:
+        id: printer_name
+        text: "- - -"
+        size_hint: 1, 0.2
+        bold: 1
+        font_size: 20
+    CircularProgressBar:
+        pos: self.parent.pos[0] + ((self.parent.size[0] - 90)/2), self.parent.pos[1] + 30
+        id: printer_progress
+        widget_size: 90
+        thickness: 5
+        size_hint: 1, 0.6
+        progress_colour: 0, 1, 0, 1
+    Label:
+        id: printer_times
+        text: "? ? ? ?"
+        size_hint: 1, 0.2
+        bold: 1
+        font_size: 26
+        color: self.parent.printing_color if self.parent.error == 0 else self.parent.printing_error_color
