@@ -52,11 +52,11 @@ class DotonApp(App):
         layout.add_widget(cr6se)
         layout.add_widget(fake)
 
-        # listener.add_widget('node-kitchen', home)
-        # listener.add_widget('node-living', home)
-        # listener.add_widget('node-north', home)
-        # listener.add_widget('openweather', weather)
-        # listener.add_widget('openaq', air_quality)
+        listener.add_widget('node-kitchen', home)
+        listener.add_widget('node-living', home)
+        listener.add_widget('node-north', home)
+        listener.add_widget('openweather', weather)
+        listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
         listener.start()
 

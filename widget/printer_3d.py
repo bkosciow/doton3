@@ -15,7 +15,7 @@ class Printer3D(Widget, StackLayout):
         if self.printer_name:
             del(kwargs['printer_name'])
         super(StackLayout, self).__init__(**kwargs)
-        self.ids['printer_progress'].value = 1
+        self.ids['printer_progress'].value = 10
         self.ids['printer_progress'].value = 0
         self.ids['printer_name'].text = self.printer_name
         self._secondsLeft = None
@@ -25,12 +25,10 @@ class Printer3D(Widget, StackLayout):
     def tick(self, dt):
         if self.event is None or self._secondsLeft is None or self._last_dt is None:
             return
-
         now = datetime.datetime.now()
         d = now - self._last_dt
         if d.total_seconds() > 1:
             dt = datetime.timedelta(seconds=self._secondsLeft - math.floor(d.total_seconds()))
-            print(dt)
             self.ids['printer_times'].text = ':'.join(str(dt).split(':')[:2])
 
     def stop_tick(self):
@@ -39,7 +37,6 @@ class Printer3D(Widget, StackLayout):
             self.event = None
 
     def update_values(self, values, name):
-        print(values)
         if 'percentage' in values:
             self.ids['printer_progress'].value = int(values['percentage'])
         if 'secondsLeft' in values:
@@ -54,18 +51,18 @@ class Printer3D(Widget, StackLayout):
             if values['status'] == "connected":
                 self.stop_tick()
                 self.error = 0
-                self.ids['printer_times'].text = "Connected"
+                self.ids['printer_times'].text = "online"
                 self.ids['printer_progress'].value = 0
             if values['status'] == "disconnected":
                 self.stop_tick()
                 self.error = 1
-                self.ids['printer_times'].text = "Disconnected"
+                self.ids['printer_times'].text = "OFFLINE"
             if values['status'] == "aborted":
                 self.stop_tick()
                 self.error = 1
-                self.ids['printer_times'].text = "Aborted"
+                self.ids['printer_times'].text = "ABORTED"
             if values['status'] == "printed" and values['secondsLeft'] == 0:
                 self.stop_tick()
                 self.error = 0
-                self.ids['printer_times'].text = "DONE"
+                self.ids['printer_times'].text = "done"
 
