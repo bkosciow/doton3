@@ -43,14 +43,16 @@ class DotonApp(App):
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
         weather = Weather(pos=(220, 290))
-        cr6se = Printer3D(pos=(400, 100), printer_name='CR6SE')
-        fake = Printer3D(pos=(200, 100), printer_name='FAKE')
+        cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
+        fake = Printer3D(pos=(110, 200), printer_name='FAKE')
+        # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
         layout.add_widget(home)
         layout.add_widget(air_quality)
         layout.add_widget(weather)
         layout.add_widget(cr6se)
         layout.add_widget(fake)
+        # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
@@ -58,6 +60,8 @@ class DotonApp(App):
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
+        listener.add_widget('node-fake', fake)
+        # listener.add_widget('node-fake1', fake1)
         listener.start()
 
         return layout

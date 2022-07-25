@@ -83,7 +83,7 @@ class CircularProgressBar(Widget):
         self._max_progress = _DEFAULT_MAX_PROGRESS
         self._min_progress = _DEFAULT_MIN_PROGRESS
         self._widget_size = _DEFAULT_WIDGET_SIZE
-        self._text_label = _DEFAULT_TEXT_LABEL
+        self._text_label = Label(text="{}%", font_size=40)
 
         # Initialise the progress value to the minimum - gets overridden post init anyway
         self._value = _DEFAULT_MIN_PROGRESS

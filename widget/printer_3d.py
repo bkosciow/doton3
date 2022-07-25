@@ -40,7 +40,7 @@ class Printer3D(Widget, StackLayout):
         if 'percentage' in values:
             self.ids['printer_progress'].value = int(values['percentage'])
         if 'secondsLeft' in values:
-            self.ids['printer_times'].text = str(values["secondsLeft"])
+            # self.ids['printer_times'].text = str(values["secondsLeft"])
             if values['secondsLeft'] != 0 and values['secondsLeft'] != '-':
                 self._secondsLeft = int(values['secondsLeft'])
                 self._last_dt = datetime.datetime.now()
