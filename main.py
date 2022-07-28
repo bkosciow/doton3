@@ -22,19 +22,18 @@ from view.image_rotate import ImageRotate
 from view.weather_cloudiness import WeatherCloudiness
 from view.weather_humidity import WeatherHumidity
 from view.weather_temperature import WeatherTemperature
+from view.circular_progress_bar import CircularProgressBar
 from view.power_socket import PowerSocket
 from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
+from widget.printer_3d import Printer3D
 from service.exceptions import *
 
 config = Config()
 comm.address = (config.get("message.ip"), int(config.get("message.port")))
 listener = Listener(config.get('socket.address'))
 
-
-# class ImageCloud(StencilView):
-#     pass
 
 class DotonApp(App):
     def build(self):
@@ -44,17 +43,25 @@ class DotonApp(App):
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
         weather = Weather(pos=(220, 290))
+        cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
+        fake = Printer3D(pos=(110, 200), printer_name='FAKE')
+        # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
         layout.add_widget(home)
         layout.add_widget(air_quality)
         layout.add_widget(weather)
+        layout.add_widget(cr6se)
+        layout.add_widget(fake)
+        # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
         listener.add_widget('node-north', home)
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
-
+        listener.add_widget('node-ce6cr', cr6se)
+        listener.add_widget('node-fake', fake)
+        # listener.add_widget('node-fake1', fake1)
         listener.start()
 
         return layout
