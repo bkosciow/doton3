@@ -28,8 +28,10 @@ class Printer3D(Widget, StackLayout):
         now = datetime.datetime.now()
         d = now - self._last_dt
         if d.total_seconds() > 1:
-            dt = datetime.timedelta(seconds=self._secondsLeft - math.floor(d.total_seconds()))
-            self.ids['printer_times'].text = ':'.join(str(dt).split(':')[:2])
+            diff = self._secondsLeft - math.floor(d.total_seconds())
+            if diff >= 0:
+                dt = datetime.timedelta(seconds=diff)
+                self.ids['printer_times'].text = ':'.join(str(dt).split(':')[:2])
 
     def stop_tick(self):
         if self.event is not None:
