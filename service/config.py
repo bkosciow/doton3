@@ -11,6 +11,7 @@ class Config(object):
         self.file = file
         self.config = ConfigParser()
         self.config.read(file)
+        self.init_message()
 
     def get(self, name):
         if "." in name:

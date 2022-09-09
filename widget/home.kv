@@ -4,7 +4,7 @@
     size_hint: (None, None)
     size: 300, 200
     pos: 0, 0
-    LabelBorder:
+    Room:
         id: kitchen
         text: '00\n00'
         size_hint: 0.35, 0.6
@@ -12,11 +12,12 @@
         font_size: 20
         bold: 1
         PowerSocket:
+            node_name: "node-kitchen"
             id: relay-kitchen-0
             x: 30
             y: 5
 
-    LabelBorder:
+    Room:
         id: lib
         text: '00\n00'
         size_hint: 0.2, 0.6
@@ -24,7 +25,7 @@
         font_size: 20
         bold: 1
 
-    LabelBorder:
+    Room:
         id: living
         text: '00\n00'
         size_hint: 0.45, 0.6
@@ -32,7 +33,7 @@
         font_size: 20
         bold: 1
 
-    LabelBorder:
+    Room:
         id: toilet
         text: '00\n00'
         size_hint: 0.2, 0.4
@@ -40,7 +41,7 @@
         font_size: 20
         bold: 1
 
-    LabelBorder:
+    Room:
         id: corridor
         text: '00\n00'
         size_hint: 0.5, 0.4
@@ -48,7 +49,7 @@
         font_size: 20
         bold: 1
 
-    LabelBorder:
+    Room:
         id: north
         text: '00\n00'
         size_hint: 0.3, 0.4
@@ -56,6 +57,7 @@
         font_size: 20
         bold: 1
         PowerSocket:
+            node_name: "node-north"
             id: relay-north-0
             x: 10
             y: 10
