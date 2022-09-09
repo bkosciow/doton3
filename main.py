@@ -17,6 +17,7 @@ from service.config import Config
 from socket_conn.listener import Listener
 import service.comm as comm
 from view.label_border import LabelBorder
+from view.room import Room
 from view.air_indicator import AirIndicator
 from view.image_rotate import ImageRotate
 from view.weather_cloudiness import WeatherCloudiness
@@ -44,14 +45,14 @@ class DotonApp(App):
         air_quality = AirQuality(pos=(0, 350))
         weather = Weather(pos=(220, 290))
         cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
-        fake = Printer3D(pos=(110, 200), printer_name='FAKE')
+        ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
         layout.add_widget(home)
         layout.add_widget(air_quality)
         layout.add_widget(weather)
         layout.add_widget(cr6se)
-        layout.add_widget(fake)
+        layout.add_widget(ender5pro)
         # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
@@ -60,7 +61,7 @@ class DotonApp(App):
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
-        listener.add_widget('node-fake', fake)
+        listener.add_widget('node-ender5pro', ender5pro)
         # listener.add_widget('node-fake1', fake1)
         listener.start()
 

@@ -2,17 +2,16 @@
 import abc
 
 
-class Widget:
-
+class Widget():
     @abc.abstractmethod
     def update_values(self, values, name):
         """change a value, values is a dict [name] = value"""
         pass
 
 
-class Clickable(metaclass=abc.ABCMeta):
-    """Interface for clickable widget"""
+class Action():
+    """Interface for action widget"""
     @abc.abstractmethod
-    def action(self, name, pos_x, pos_y):
+    def action(self, touch):
         """action for touch"""
         return
