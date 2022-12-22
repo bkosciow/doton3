@@ -1,0 +1,18 @@
+#kivy 2.0
+<RelaySwitch>
+    orientation: 'lr-tb'
+    size: 80,100
+    size_hint: None, None
+    ToggleButton:
+        size_hint: 1, 0.8
+        pos: 0, 0
+        background_down: 'assets/image/button/switch_off.png'
+        background_normal: 'assets/image/button/switch_on.png'
+        id: activator
+    Label:
+        id: device_name
+        size_hint: 1, 0.2
+        text: ''
+        color: 1,1,1,1
+        bold: 1
+        font_size: 20

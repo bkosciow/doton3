@@ -29,6 +29,7 @@ from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
 from widget.printer_3d import Printer3D
+from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 
 config = Config()
@@ -46,6 +47,12 @@ class DotonApp(App):
         weather = Weather(pos=(220, 290))
         cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
         ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
+
+        upperLight = RelaySwitch(pos=(700, 100), text='top', node_name='node-printers', channel=3)
+        lowerLight = RelaySwitch(pos=(610, 100), text='down', node_name='node-printers', channel=2)
+        power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1)
+        powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0)
+
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
         layout.add_widget(home)
@@ -53,16 +60,27 @@ class DotonApp(App):
         layout.add_widget(weather)
         layout.add_widget(cr6se)
         layout.add_widget(ender5pro)
+        layout.add_widget(lowerLight)
+        layout.add_widget(upperLight)
+        layout.add_widget(power5pro)
+        layout.add_widget(powerCr6se)
         # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
         listener.add_widget('node-north', home)
         listener.add_widget('node-lib', home)
+        listener.add_widget('node-corridor', home)
+        listener.add_widget('node-toilet', home)
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
         listener.add_widget('node-ender5pro', ender5pro)
+
+        listener.add_widget('node-printers', lowerLight)
+        listener.add_widget('node-printers', upperLight)
+        listener.add_widget('node-printers', power5pro)
+        listener.add_widget('node-printers', powerCr6se)
         # listener.add_widget('node-fake1', fake1)
         listener.start()
 
