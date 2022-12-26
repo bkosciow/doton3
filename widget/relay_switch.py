@@ -2,6 +2,7 @@ from kivy.uix.stacklayout import StackLayout
 from service.widget import Widget
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
+from service.widget import Action
 import pathlib
 import service.comm as comm
 
@@ -20,26 +21,30 @@ class RelaySwitch(Widget, StackLayout):
         del(kwargs['node_name'])
         del(kwargs['channel'])
         super(StackLayout, self).__init__(**kwargs)
-        self.ids['activator'].bind(state=self.on_state)
         self.ids['device_name'].text = self.text
 
     def update_values(self, values, name):
+        self.ids['device_name'].disabled = False
         if 'relay' in values:
-            self.skip_broadcast = True
             if values['relay'][self.channel] == 0:
-                self.ids['activator'].state = 'down'
+                self.state = 'down'
             else:
-                self.ids['activator'].state = 'normal'
-            self.skip_broadcast = False
+                self.state = 'normal'
 
-    def on_state(self, widget, value):
-        message = {
-            'parameters': {
-                'channel': self.channel
-            },
-            'targets': [self.node_name],
-            'event': "channel.off" if value == 'down' else "channel.on"
-        }
-        if not self.skip_broadcast:
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            if self.state == 'normal':
+                state = 'down'
+            else:
+                state = 'normal'
+
+            message = {
+                'parameters': {
+                    'channel': self.channel
+                },
+                'targets': [self.node_name],
+                'event': "channel.off" if state == 'down' else "channel.on"
+            }
+            self.state = state
+            self.ids['device_name'].disabled = True
             comm.send(message)
-

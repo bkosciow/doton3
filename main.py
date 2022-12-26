@@ -47,6 +47,7 @@ class DotonApp(App):
         weather = Weather(pos=(220, 290))
         cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
         ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
+        ender5plus = Printer3D(pos=(110, 50), printer_name='E5+')
 
         upperLight = RelaySwitch(pos=(700, 100), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 100), text='down', node_name='node-printers', channel=2)
@@ -60,6 +61,7 @@ class DotonApp(App):
         layout.add_widget(weather)
         layout.add_widget(cr6se)
         layout.add_widget(ender5pro)
+        layout.add_widget(ender5plus)
         layout.add_widget(lowerLight)
         layout.add_widget(upperLight)
         layout.add_widget(power5pro)
@@ -76,6 +78,7 @@ class DotonApp(App):
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
         listener.add_widget('node-ender5pro', ender5pro)
+        listener.add_widget('node-ender5plus', ender5plus)
 
         listener.add_widget('node-printers', lowerLight)
         listener.add_widget('node-printers', upperLight)
