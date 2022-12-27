@@ -6,6 +6,7 @@
     pos: 0, 0
     Room:
         id: kitchen
+        node_names: "node-kitchen",
         text: '00\n00'
         size_hint: 0.35, 0.6
         border_width: 2
@@ -13,17 +14,24 @@
         bold: 1
         PowerSocket:
             node_name: "node-kitchen"
-            id: relay-kitchen-0
+            id: node-kitchen-relay-0
             x: 30
             y: 5
 
     Room:
         id: lib
+        node_names: "node-lib", "node-printers"
         text: '00\n00'
         size_hint: 0.2, 0.6
         border_width: 2
         font_size: 20
         bold: 1
+        PowerSocket:
+            node_name: "node-printers"
+            channel: 3
+            id: node-printers-relay-3
+            x: 10
+            y: 20
 
     Room:
         id: living
@@ -51,6 +59,7 @@
 
     Room:
         id: north
+        node_names: "node-north", "node-printers"
         text: '00\n00'
         size_hint: 0.3, 0.4
         border_width: 2
@@ -58,6 +67,13 @@
         bold: 1
         PowerSocket:
             node_name: "node-north"
-            id: relay-north-0
+            id: node-north-relay-0
             x: 10
             y: 10
+
+        PowerSocket:
+            node_name: "node-printers"
+            channel: 2
+            id: node-printers-relay-2
+            x: 10
+            y: 40

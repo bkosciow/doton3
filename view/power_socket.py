@@ -16,4 +16,5 @@ class PowerSocket(Label, Action):
             'targets': [self.node_name],
             'event': "channel.off" if self.enabled == 1 else "channel.on"
         }
+        # print(message)
         comm.send(message)
