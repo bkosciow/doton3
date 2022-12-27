@@ -11,9 +11,10 @@ class PowerSocket(Label, Action):
     def action(self, touch):
         message = {
             'parameters': {
-                'channel': 0
+                'channel': self.channel
             },
             'targets': [self.node_name],
             'event': "channel.off" if self.enabled == 1 else "channel.on"
         }
+        # print(message)
         comm.send(message)

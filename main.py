@@ -74,6 +74,8 @@ class DotonApp(App):
         listener.add_widget('node-lib', home)
         listener.add_widget('node-corridor', home)
         listener.add_widget('node-toilet', home)
+        listener.add_widget('node-printers', home)
+
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
