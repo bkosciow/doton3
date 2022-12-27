@@ -8,7 +8,7 @@
     background_normal: 'assets/image/button/switch_on.png'
     AsyncImage:
         size_hint: 1, 0.8
-        pos: 0, 0
+
         source: self.parent.background_normal if self.parent.state == 'normal' else self.parent.background_down
         id: activator
         nocache: 1

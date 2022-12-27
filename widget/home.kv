@@ -27,11 +27,44 @@
         font_size: 20
         bold: 1
         PowerSocket:
+            image_on: 'assets/image/button/bulb_on.png'
+            image_off: 'assets/image/button/bulb_off.png'
+            label: "light down"
+            node_name: "node-printers"
+            channel: 2
+            id: node-printers-relay-2
+            x: 35
+            y: 15
+
+        PowerSocket:
+            image_on: 'assets/image/button/bulb_on.png'
+            image_off: 'assets/image/button/bulb_off.png'
+            label: "light up"
             node_name: "node-printers"
             channel: 3
             id: node-printers-relay-3
-            x: 10
-            y: 20
+            x: 5
+            y: 15
+
+        PowerSocket:
+            image_on: 'assets/image/button/3dprinter_on.png'
+            image_off: 'assets/image/button/3dprinter_off.png'
+            label: "E5pro"
+            node_name: "node-printers"
+            channel: 1
+            id: node-printers-relay-1
+            x: 35
+            y: 85
+
+        PowerSocket:
+            image_on: 'assets/image/button/3dprinter_on.png'
+            image_off: 'assets/image/button/3dprinter_off.png'
+            label: "6se"
+            node_name: "node-printers"
+            channel: 0
+            id: node-printers-relay-0
+            x: 5
+            y: 85
 
     Room:
         id: living
@@ -66,14 +99,8 @@
         font_size: 20
         bold: 1
         PowerSocket:
+            label: "Socket"
             node_name: "node-north"
             id: node-north-relay-0
             x: 10
             y: 10
-
-        PowerSocket:
-            node_name: "node-printers"
-            channel: 2
-            id: node-printers-relay-2
-            x: 10
-            y: 40
