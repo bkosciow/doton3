@@ -51,8 +51,11 @@ class DotonApp(App):
 
         upperLight = RelaySwitch(pos=(700, 100), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 100), text='down', node_name='node-printers', channel=2)
-        power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1)
-        powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0)
+        power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1, confirm=True)
+        powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0, confirm=True)
+
+        power5plus = RelaySwitch(pos=(520, 0), text='5plus', node_name='node-relaybox2', channel=2, confirm=True)
+        boxLight = RelaySwitch(pos=(520, 100), text='box', node_name='node-relaybox2', channel=1, confirm=True)
 
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
@@ -66,6 +69,8 @@ class DotonApp(App):
         layout.add_widget(upperLight)
         layout.add_widget(power5pro)
         layout.add_widget(powerCr6se)
+        layout.add_widget(power5plus)
+        layout.add_widget(boxLight)
         # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
@@ -86,6 +91,9 @@ class DotonApp(App):
         listener.add_widget('node-printers', upperLight)
         listener.add_widget('node-printers', power5pro)
         listener.add_widget('node-printers', powerCr6se)
+
+        listener.add_widget('node-relaybox2', power5plus)
+        listener.add_widget('node-relaybox2', boxLight)
         # listener.add_widget('node-fake1', fake1)
         listener.start()
 

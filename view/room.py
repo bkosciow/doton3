@@ -27,7 +27,13 @@ class Room(LabelBorder):
                 content.spacing = [10, 10]
                 popup = Popup(title="Actions", size_hint=(0.6, 0.6))
                 for item in detected:
-                    button = RelaySwitch(node_name=item.node_name, channel=item.channel, text=item.label)
+                    print(hasattr(item, 'confirm'))
+                    button = RelaySwitch(
+                        node_name=item.node_name,
+                        channel=item.channel,
+                        text=item.label,
+                        confirm=item.confirm if hasattr(item, 'confirm') else False
+                    )
                     button.state = 'normal' if item.enabled == 1 else 'down'
                     content.add_widget(button)
                 popup.content = content
