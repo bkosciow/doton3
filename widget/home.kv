@@ -33,8 +33,8 @@
             node_name: "node-printers"
             channel: 2
             id: node-printers-relay-2
-            x: 35
-            y: 15
+            x: 38
+            y: 3
 
         PowerSocket:
             image_on: 'assets/image/button/bulb_on.png'
@@ -43,8 +43,8 @@
             node_name: "node-printers"
             channel: 3
             id: node-printers-relay-3
-            x: 5
-            y: 15
+            x: 38
+            y: 25
 
         PowerSocket:
             image_on: 'assets/image/button/3dprinter_on.png'
@@ -54,7 +54,8 @@
             channel: 1
             id: node-printers-relay-1
             x: 35
-            y: 85
+            y: 87
+            confirm: True
 
         PowerSocket:
             image_on: 'assets/image/button/3dprinter_on.png'
@@ -64,8 +65,15 @@
             channel: 0
             id: node-printers-relay-0
             x: 5
-            y: 85
+            y: 87
+            confirm: True
 
+        PowerSocket:
+            label: "Socket"
+            node_name: "node-lib"
+            id: node-lib-relay-0
+            x: 2
+            y: 10
     Room:
         id: living
         text: '00\n00'
@@ -76,11 +84,18 @@
 
     Room:
         id: toilet
+        node_names: "node-toilet",
         text: '00\n00'
         size_hint: 0.2, 0.4
         border_width: 2
         font_size: 20
         bold: 1
+        PowerSocket:
+            label: "Socket"
+            node_name: "node-toilet"
+            id: node-toilet-relay-0
+            x: 2
+            y: 10
 
     Room:
         id: corridor
@@ -92,7 +107,7 @@
 
     Room:
         id: north
-        node_names: "node-north", "node-printers"
+        node_names: "node-north",
         text: '00\n00'
         size_hint: 0.3, 0.4
         border_width: 2
