@@ -33,6 +33,10 @@ class Octoprint(Widget, StackLayout):
         if values['error']:
             self.error = 1
             self.ids['status'].text = "OFFLINE"
+            self.ids['nozzle_temp'].text = ""
+            self.ids['bed_temp'].text = ""
+            self.ids['printer_times'].text = ""
+            self.ids['progress'].text = ""
         else:
             self.error = 0
             self.ids['status'].text = values['status']

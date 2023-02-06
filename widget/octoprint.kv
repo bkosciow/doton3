@@ -15,8 +15,14 @@
         Color:
             rgba: self.background_color
         Rectangle:
-            size: self.width-4, self.height-4
-            pos: self.x+2, self.y+2
+            size: self.width, self.height
+            pos: self.x, self.y
+        Color:
+            rgba: (1,1,1,0) if self.error == 0 else (1,1,1,1)
+        Rectangle:
+            pos: self.x+10, self.y+30
+            source: 'assets/image/octoprint/warning.png'
+
     Label:
         id: printer_name
         text: "- - -"
@@ -28,6 +34,7 @@
         id: nozzle
         size_hint: 0.3, 0.1
         source: 'assets/image/octoprint/nozzle.png'
+        opacity: 1 if self.parent.error == 0 else 0
     Label:
         id: nozzle_temp
         size_hint: 0.7, 0.1
@@ -38,15 +45,23 @@
 
     AsyncImage:
         id: bed
-        size_hint: 0.3, 0.15
+        size_hint: 0.3, 0.1
         source: 'assets/image/octoprint/bed.png'
+        opacity: 1 if self.parent.error == 0 else 0
     Label:
         id: bed_temp
-        size_hint: 0.7, 0.15
+        size_hint: 0.7, 0.1
         text: "70 / 70"
         color: 1, 1, 1, 1
         font_size: 16
         bold: 1
+
+    Label:
+        id: progress
+        text: "90%"
+        size_hint: 1, 0.2
+        bold: 1
+        font_size: 18
 
     Label:
         id: printer_times
@@ -54,7 +69,7 @@
         size_hint: 1, 0.2
         bold: 1
         font_size: 18
-        color: self.parent.printing_color if self.parent.error == 0 else self.parent.printing_error_color
+        #color: self.parent.printing_color if self.parent.error == 0 else self.parent.printing_error_color
 
     Label:
         id: status
