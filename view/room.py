@@ -9,6 +9,26 @@ from kivy.uix.label import Label
 
 
 class Room(LabelBorder):
+    def __init__(self, **kwargs):
+        super(LabelBorder, self).__init__(**kwargs)
+        self.popup = None
+
+    def _create_popup(self, detected):
+        content = StackLayout()
+        content.padding = [15, 25, 15, 15]
+        content.spacing = [10, 10]
+        self.popup = Popup(title="Actions", size_hint=(0.6, 0.6))
+        for item in detected:
+            button = RelaySwitch(
+                node_name=item.node_name,
+                channel=item.channel,
+                text=item.label,
+                confirm=item.confirm if hasattr(item, 'confirm') else False
+            )
+            button.state = 'normal' if item.enabled == 1 else 'down'
+            content.add_widget(button)
+        self.popup.content = content
+
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
             detected = []
@@ -22,21 +42,7 @@ class Room(LabelBorder):
             if len(detected) == 1:
                 detected[0].action(touch)
             else:
-                content = StackLayout()
-                content.padding = [15, 25, 15, 15]
-                content.spacing = [10, 10]
-                popup = Popup(title="Actions", size_hint=(0.6, 0.6))
-                for item in detected:
-                    print(hasattr(item, 'confirm'))
-                    button = RelaySwitch(
-                        node_name=item.node_name,
-                        channel=item.channel,
-                        text=item.label,
-                        confirm=item.confirm if hasattr(item, 'confirm') else False
-                    )
-                    button.state = 'normal' if item.enabled == 1 else 'down'
-                    content.add_widget(button)
-                popup.content = content
+                if not self.popup:
+                    self._create_popup(detected)
 
-                popup.open()
-
+                self.popup.open()
