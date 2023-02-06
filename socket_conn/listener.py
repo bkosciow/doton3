@@ -31,9 +31,9 @@ class Listener(Thread):
                         data = self._decode_data(data)
                         for response in data:
                             key = list(response)[0]
-                            print(key)
-                            if key == 'octoprint':
-                                print(response[key])
+                            # print(key)
+                            # if key == 'octoprint':
+                            #     print(response[key])
                             self._dispatch_data(key, response[key])
                     except ValueError as e:
                         print("failed to unjonsonify")

@@ -29,6 +29,7 @@ from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
 from widget.printer_3d import Printer3D
+from widget.octoprint import Octoprint
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 
@@ -45,9 +46,15 @@ class DotonApp(App):
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
         weather = Weather(pos=(220, 290))
+
         cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
         ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
-        ender5plus = Printer3D(pos=(110, 50), printer_name='E5+')
+        ender5plus = Printer3D(pos=(0, 50), printer_name='E5+')
+        e5pro = Octoprint(
+            pos=(110, 50),
+            printer_name='E5pro',
+            node_name='ender5pro',
+        )
 
         upperLight = RelaySwitch(pos=(700, 100), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 100), text='down', node_name='node-printers', channel=2)
@@ -68,6 +75,7 @@ class DotonApp(App):
         layout.add_widget(lowerLight)
         layout.add_widget(upperLight)
         layout.add_widget(power5pro)
+        layout.add_widget(e5pro)
         layout.add_widget(powerCr6se)
         layout.add_widget(power5plus)
         layout.add_widget(boxLight)
@@ -85,6 +93,7 @@ class DotonApp(App):
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
         listener.add_widget('node-ender5pro', ender5pro)
+        listener.add_widget('octoprint', e5pro)
         listener.add_widget('node-ender5plus', ender5plus)
 
         listener.add_widget('node-printers', lowerLight)
