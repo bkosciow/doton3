@@ -8,7 +8,7 @@
         id: kitchen
         node_names: "node-kitchen",
         text: '00\n00'
-        size_hint: 0.35, 0.6
+        size_hint: 0.30, 0.6
         border_width: 2
         font_size: 20
         bold: 1
@@ -20,9 +20,9 @@
 
     Room:
         id: lib
-        node_names: "node-lib", "node-printers"
+        node_names: "node-lib", "node-printers", "node-relaybox2"
         text: '00\n00'
-        size_hint: 0.2, 0.6
+        size_hint: 0.25, 0.6
         border_width: 2
         font_size: 20
         bold: 1
@@ -33,8 +33,8 @@
             node_name: "node-printers"
             channel: 2
             id: node-printers-relay-2
-            x: 38
-            y: 3
+            x: 55
+            y: 62
 
         PowerSocket:
             image_on: 'assets/image/button/bulb_on.png'
@@ -43,8 +43,8 @@
             node_name: "node-printers"
             channel: 3
             id: node-printers-relay-3
-            x: 38
-            y: 25
+            x: 25
+            y: 90
 
         PowerSocket:
             image_on: 'assets/image/button/3dprinter_on.png'
@@ -53,8 +53,8 @@
             node_name: "node-printers"
             channel: 1
             id: node-printers-relay-1
-            x: 35
-            y: 87
+            x: 1
+            y: 67
             confirm: True
 
         PowerSocket:
@@ -64,9 +64,30 @@
             node_name: "node-printers"
             channel: 0
             id: node-printers-relay-0
-            x: 5
+            x: 1
+            y: 95
+            confirm: True
+
+        PowerSocket:
+            image_on: 'assets/image/button/3dprinter_on.png'
+            image_off: 'assets/image/button/3dprinter_off.png'
+            label: "5+"
+            node_name: "node-relaybox2"
+            channel: 2
+            id: node-relaybox2-relay-2
+            x: 47
             y: 87
             confirm: True
+
+        PowerSocket:
+            image_on: 'assets/image/button/bulb_on.png'
+            image_off: 'assets/image/button/bulb_off.png'
+            label: "box light"
+            node_name: "node-relaybox2"
+            channel: 1
+            id: node-relaybox2-relay-1
+            x: 2
+            y: 47
 
         PowerSocket:
             label: "Socket"

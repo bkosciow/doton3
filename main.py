@@ -50,19 +50,18 @@ class DotonApp(App):
         cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
         ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
         ender5plus = Printer3D(pos=(0, 50), printer_name='E5+')
-        e5pro = Octoprint(
-            pos=(110, 50),
-            printer_name='E5pro',
-            node_name='ender5pro',
-        )
+
+        octo_e5pro = Octoprint(pos=(110, 50), printer_name='E5pro', node_name='ender5pro')
+        octo_cr6se = Octoprint(pos=(230, 50), printer_name='CR6SE', node_name='cr6se')
+        octo_e5plus = Octoprint(pos=(350, 50), printer_name='E5Plus', node_name='ender5plus')
 
         upperLight = RelaySwitch(pos=(700, 100), text='top', node_name='node-printers', channel=3)
-        lowerLight = RelaySwitch(pos=(610, 100), text='down', node_name='node-printers', channel=2)
-        power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1, confirm=True)
-        powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0, confirm=True)
+        lowerLight = RelaySwitch(pos=(700, 0), text='down', node_name='node-printers', channel=2)
+        # power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1, confirm=True)
+        # powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0, confirm=True)
 
-        power5plus = RelaySwitch(pos=(520, 0), text='5plus', node_name='node-relaybox2', channel=2, confirm=True)
-        boxLight = RelaySwitch(pos=(520, 100), text='box', node_name='node-relaybox2', channel=1, confirm=True)
+        #power5plus = RelaySwitch(pos=(520, 0), text='5plus', node_name='node-relaybox2', channel=2, confirm=True)
+        box2Light2 = RelaySwitch(pos=(610, 100), text='box', node_name='node-relaybox2', channel=1)
 
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
@@ -74,11 +73,13 @@ class DotonApp(App):
         layout.add_widget(ender5plus)
         layout.add_widget(lowerLight)
         layout.add_widget(upperLight)
-        layout.add_widget(power5pro)
-        layout.add_widget(e5pro)
-        layout.add_widget(powerCr6se)
-        layout.add_widget(power5plus)
-        layout.add_widget(boxLight)
+        # layout.add_widget(power5pro)
+        layout.add_widget(octo_e5pro)
+        layout.add_widget(octo_e5plus)
+        layout.add_widget(octo_cr6se)
+        # layout.add_widget(powerCr6se)
+        # layout.add_widget(power5plus)
+        layout.add_widget(box2Light2)
         # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
@@ -88,21 +89,24 @@ class DotonApp(App):
         listener.add_widget('node-corridor', home)
         listener.add_widget('node-toilet', home)
         listener.add_widget('node-printers', home)
+        listener.add_widget('node-relaybox2', home)
 
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
         listener.add_widget('node-ce6cr', cr6se)
         listener.add_widget('node-ender5pro', ender5pro)
-        listener.add_widget('octoprint', e5pro)
+        listener.add_widget('octoprint', octo_e5pro)
+        listener.add_widget('octoprint', octo_e5plus)
+        listener.add_widget('octoprint', octo_cr6se)
         listener.add_widget('node-ender5plus', ender5plus)
 
         listener.add_widget('node-printers', lowerLight)
         listener.add_widget('node-printers', upperLight)
-        listener.add_widget('node-printers', power5pro)
-        listener.add_widget('node-printers', powerCr6se)
+        # listener.add_widget('node-printers', power5pro)
+        # listener.add_widget('node-printers', powerCr6se)
 
-        listener.add_widget('node-relaybox2', power5plus)
-        listener.add_widget('node-relaybox2', boxLight)
+        # listener.add_widget('node-relaybox2', power5plus)
+        listener.add_widget('node-relaybox2', box2Light2)
         # listener.add_widget('node-fake1', fake1)
         listener.start()
 

@@ -6,22 +6,38 @@
     pos: 0, 0
     size: 110, 150
     background_color: 0.1, 0.1, 0.1, 1
+
     printing_done_color: 0.1, 1, 0.1, 1
     printing_error_color: 1, 0, 0, 1
-    printing_color: 1, 1, 1, 1
+    idle_color: 1, 1, 1, 1
+    printing_color: 1, 1, 0, 1
+
     error: 0
     printing: 0
+    done: 0
     canvas.before:
+        Color:
+            rgb: (.5,.5,.5) if self.done == 0 else self.printing_done_color
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+            width: 2
         Color:
             rgba: self.background_color
         Rectangle:
-            size: self.width, self.height
-            pos: self.x, self.y
+            size: self.width-2, self.height-2
+            pos: self.x+1, self.y+1
         Color:
             rgba: (1,1,1,0) if self.error == 0 else (1,1,1,1)
         Rectangle:
-            pos: self.x+10, self.y+30
+            pos: self.x+8, self.y+28
             source: 'assets/image/octoprint/warning.png'
+
+        Color:
+            rgba: (1,1,1,1) if self.done == 1 else (1,1,1,0)
+        Rectangle:
+            pos: self.x+16, self.y+34
+            source: 'assets/image/octoprint/done.png'
+            size: 80, 80
 
     Label:
         id: printer_name
@@ -34,34 +50,37 @@
         id: nozzle
         size_hint: 0.3, 0.1
         source: 'assets/image/octoprint/nozzle.png'
-        opacity: 1 if self.parent.error == 0 else 0
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
     Label:
         id: nozzle_temp
         size_hint: 0.7, 0.1
-        text: "210 / 210"
-        color: 1, 1, 1, 1
+        text: " - - -"
+        color: self.parent.idle_color if self.parent.printing == 0 else self.parent.printing_color
         font_size: 16
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
         bold: 1
 
     AsyncImage:
         id: bed
         size_hint: 0.3, 0.1
         source: 'assets/image/octoprint/bed.png'
-        opacity: 1 if self.parent.error == 0 else 0
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
     Label:
         id: bed_temp
         size_hint: 0.7, 0.1
-        text: "70 / 70"
-        color: 1, 1, 1, 1
+        text: " - - - "
+        color: self.parent.idle_color if self.parent.printing == 0 else self.parent.printing_color
         font_size: 16
         bold: 1
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
 
     Label:
         id: progress
-        text: "90%"
+        text: " - - - "
         size_hint: 1, 0.2
         bold: 1
-        font_size: 18
+        font_size: 22
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
 
     Label:
         id: printer_times
@@ -70,6 +89,7 @@
         bold: 1
         font_size: 18
         #color: self.parent.printing_color if self.parent.error == 0 else self.parent.printing_error_color
+        opacity: 1 if self.parent.error == 0 and self.parent.done == 0 else 0
 
     Label:
         id: status
@@ -77,5 +97,5 @@
         size_hint: 1, 0.2
         bold: 1
         font_size: 18
-        color: self.parent.printing_color if self.parent.error == 0 else self.parent.printing_error_color
+        color: self.parent.printing_color if self.parent.printing == 1 else self.parent.idle_color if self.parent.error == 0 else self.parent.printing_error_color
 
