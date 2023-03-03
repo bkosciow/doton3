@@ -3,9 +3,42 @@ from kivy.lang import Builder
 import pathlib
 from service.widget import Widget
 from datetime import datetime, timedelta
+from service.widget import Action
+from kivy.uix.popup import Popup
+from kivy.uix.button import Button
+
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'octoprint.kv')
 
+STATUS_IDLE = "idle"
+STATUS_PRINTING = "work"
+STATUS_DISCONNECTED = "dc"
+STATUS_ERROR = "error"
+STATUS_UNKNOWN = "unknown"
+
+
+class DetailPopup(Popup):
+    def add_port(self, name):
+        self.ids['detail_port_list'].add_widget(
+            Button(
+                text=name,
+                on_press=self._select_port_action,
+            )
+        )
+
+    def _select_port_action(self, item):
+        self.ids['detail_selected_port'].text = item.text
+        self.ids['detail_selected_port_message'].text = ""
+
+    def _connect_octoprint(self):
+        port = self.ids['detail_selected_port'].text
+        print(port)
+        if port == "":
+            self.ids['detail_selected_port_message'].text = "select a port"
+            return
+
+        self.ids['detail_selected_port_message'].text = "Connecting"
+        print("connect to" + self.ids['detail_selected_port'].text)
 
 class Octoprint(Widget, StackLayout):
     def __init__(self, **kwargs):
@@ -19,43 +52,113 @@ class Octoprint(Widget, StackLayout):
         self._secondsLeft = None
         self._last_dt = None
         self.event = None
+        self.popup = DetailPopup()
+        self.popup.add_port('/dev/usb0')
+        self.popup.add_port('/dev/usb1')
+        self.popup.add_port('/dev/acm0')
+
+        # self.popup.ids['detail_btn_stop'].bind(on_press=self.on_stop)
+        # self.popup.ids['detail_btn_pause'].bind(on_press=self.on_pause)
 
     def update_values(self, values, name):
         if self.node_name not in values:
             return
         values = values[self.node_name]
+        # print(self.popup.ids["detail_status_printing"].height)
+        # print(self.popup.ids["detail_status_printing"].size_hint)
+        if 'connection' in values:
+            self.popup.ids['detail_connection'].text = str(values['connection']['port']) + " @ " + str(values['connection']['baudrate'])
+
+        if 'octoprint' in values:
+            self.popup.ids['detail_octoprint'].text = str(values['octoprint'])
 
         if values['error']:
-            self.error = 1
-            self.printing = 0
-            self.done = 0
-            self.ids['status'].text = "OFFLINE"
-            self.ids['nozzle_temp'].text = ""
-            self.ids['bed_temp'].text = ""
-            self.ids['printer_times'].text = ""
-            self.ids['progress'].text = ""
+            self._update_error_data(values)
         else:
-            self.error = 0
-            if values['print'] == '':
-                self.printing = 0
+            self._update_operational_data(values)
+        # print(values)
+        if 'octoprint' in values and values['octoprint']:
+            if values['connection']['port'] is None:
+                self.popup.status = STATUS_DISCONNECTED
+            elif self.printing:
+                self.popup.status = STATUS_PRINTING
+            elif self.error:
+                self.popup.status = STATUS_ERROR
             else:
+                self.popup.status = STATUS_IDLE
+        else:
+            self.popup.status = STATUS_UNKNOWN
+
+        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
+
+    def _update_error_data(self, values):
+        self.printing = 0
+        self.ids['nozzle_temp'].text = ""
+        self.ids['bed_temp'].text = ""
+        self.ids['printer_times'].text = ""
+        self.ids['progress'].text = ""
+        self.error = 1
+        self.done = 0
+
+        if 'error_message' in values and values['error_message'] != '':
+            self.ids['status'].text = values['status']
+            self.popup.title = self.printer_name + " -- " + values['error_message']
+            self.popup.ids['detail_status'].text = values['error_message']
+        else:
+            self.popup.ids['detail_status'].text = values['status']
+            self.ids['status'].text = "OFFLINE"
+            self.popup.title = self.printer_name
+
+    def _update_operational_data(self, values):
+        self.error = 0
+        if values['print'] == '':
+            self.printing = 0
+        else:
+            if 'flags' in values and values['flags']['printing']:
                 self.printing = 1
                 self.done = 0
-                if 'completion' in values['print']:
-                    self.ids['progress'].text = str(values['print']['completion']) + " %"
-                    if values['print']['completion'] == 100:
-                        self.done = 1
-                        self.printing = 0
-                        self.ids['nozzle_temp'].text = ""
-                        self.ids['bed_temp'].text = ""
-                        self.ids['printer_times'].text = ""
-                        self.ids['progress'].text = ""
+            if 'completion' in values['print']:
+                self.ids['progress'].text = str(round(values['print']['completion'])) + " %"
+                self.popup.ids['detail_completion'].value = values['print']['completion']
+                # print(values['print']['completion'])
+                # print(values['flags'])
+                if values['print']['completion'] > 99.8:
+                    self.done = 1
+                    self.printing = 0
+                    self.ids['nozzle_temp'].text = ""
+                    self.ids['bed_temp'].text = ""
+                    self.ids['printer_times'].text = ""
+                    self.ids['progress'].text = ""
 
-                if 'printTimeLeft' in values['print']:
-                    self.ids['printer_times'].text = ':'.join(str(timedelta(seconds=values['print']['printTimeLeft'])).split(':')[:2])
+            if 'printTimeLeft' in values['print']:
+                self.ids['printer_times'].text = ':'.join(
+                    str(timedelta(seconds=values['print']['printTimeLeft'])).split(':')[:2])
+                self.popup.ids['detail_print_time_left'].text = self.ids['printer_times'].text
+            if 'printTime' in values['print']:
+                self.popup.ids['detail_print_time'].text = ':'.join(
+                    str(timedelta(seconds=values['print']['printTime'])).split(':')[:2])
+            if 'name' in values['print']:
+                self.popup.title = self.printer_name + " -- " + values['print']['name'][:-6] + " -- " + self.ids[
+                    'progress'].text
+            else:
+                self.popup.title = self.printer_name
 
-            self.ids['status'].text = values['status']
-            if values['nozzle']:
-                self.ids['nozzle_temp'].text = "{:.0f} / {:.0f}".format(values['nozzle'][0]['actual'], values['nozzle'][0]['target'])
-            if values['bed']:
-                self.ids['bed_temp'].text = "{:.0f} / {:.0f}".format(values['bed']['actual'], values['bed']['target'])
+        self.ids['status'].text = values['status']
+        self.popup.ids['detail_status'].text = self.ids['status'].text
+        if values['nozzle']:
+            self.ids['nozzle_temp'].text = "{:.0f} / {:.0f}".format(values['nozzle'][0]['actual'],
+                                                                    values['nozzle'][0]['target'])
+            self.popup.ids['detail_nozzle'].text = self.ids['nozzle_temp'].text
+        if values['bed']:
+            self.ids['bed_temp'].text = "{:.0f} / {:.0f}".format(values['bed']['actual'], values['bed']['target'])
+            self.popup.ids['detail_bed'].text = self.ids['bed_temp'].text
+
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            self.popup.open()
+
+    def on_stop(self, a):
+        print(a)
+
+    def on_pause(self, a):
+        print(a)

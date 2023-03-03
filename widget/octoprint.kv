@@ -76,7 +76,7 @@
 
     Label:
         id: progress
-        text: " - - - "
+        text: ""
         size_hint: 1, 0.2
         bold: 1
         font_size: 22
@@ -84,7 +84,7 @@
 
     Label:
         id: printer_times
-        text: "? ? ? ?"
+        text: ""
         size_hint: 1, 0.2
         bold: 1
         font_size: 18
@@ -93,9 +93,135 @@
 
     Label:
         id: status
-        text: "? ? ? ?"
+        text: ""
         size_hint: 1, 0.2
         bold: 1
         font_size: 18
         color: self.parent.printing_color if self.parent.printing == 1 else self.parent.idle_color if self.parent.error == 0 else self.parent.printing_error_color
 
+
+
+<DetailPopup>:
+    title: ""
+    size_hint: 0.7, 0.8
+    status: "unknown"
+    GridLayout:
+        cols: 2
+        StackLayout:
+            Label:
+                id: detail_octoprint
+                text_size: self.size
+                size_hint: 1, 0.1
+            Label:
+                id: detail_connection
+                text_size: self.size
+                size_hint: 1, 0.1
+            Label:
+                text: "Status:"
+                size_hint: 0.3, 0.1
+                text_size: self.size
+            Label:
+                id: detail_status
+                size_hint: 0.7, 0.1
+                text_size: self.size
+            Label:
+                text: "Nozzle:"
+                size_hint: 0.3, 0.1
+                text_size: self.size
+            Label:
+                id: detail_nozzle
+                size_hint: 0.7, 0.1
+                text_size: self.size
+            Label:
+                text: "Bed:"
+                size_hint: 0.3, 0.1
+                text_size: self.size
+            Label:
+                id: detail_bed
+                size_hint: 0.7, 0.1
+                text_size: self.size
+            ProgressBar:
+                id: detail_completion
+                size_hint: 1, 0.1
+                max: 100
+                text_size: self.size
+            Label:
+                text: "Print time:"
+                size_hint: 0.3, 0.1
+                text_size: self.size
+            Label:
+                id: detail_print_time
+                size_hint: 0.7, 0.1
+                text_size: self.size
+            Label:
+                text: "Time left:"
+                size_hint: 0.3, 0.1
+                text_size: self.size
+            Label:
+                id: detail_print_time_left
+                size_hint: 0.7, 0.1
+                text_size: self.size
+            Label:
+                size_hint: 1, 0.1
+            Button:
+                id: detail_btn_print
+                size_hint: 0.33, 0.1
+                text: "Print"
+            Button:
+                id: detail_btn_stop
+                size_hint: 0.33, 0.1
+                text: "STOP"
+            Button:
+                id: detail_btn_pause
+                size_hint: 0.33, 0.1
+                text: "Pause"
+        TabbedPanel:
+            id: detail_status_tabs
+            do_default_tab: False
+            tab_height: 0
+            tab_width: 0
+            TabbedPanelItem:
+                text: ""
+                id: detail_status_error
+                Label:
+                    text: ""
+            TabbedPanelItem:
+                text: "unknown"
+                id: detail_status_unknown
+            TabbedPanelItem:
+                text: ""
+                id: detail_status_dc
+                StackLayout:
+                    GridLayout:
+                        padding: 0, 0, 0, 0
+                        spacing: 0, 10
+                        cols: 1
+                        id: detail_port_list
+                        size_hint: 1, 0.3
+                    Label:
+                        size_hint: 0.3, 0.1
+                        text: "Port: "
+                        text_size: self.size
+                    Label:
+                        id: detail_selected_port
+                        text_size: self.size
+                        size_hint: 0.7, 0.1
+                        text: ""
+                    Label:
+                        id: detail_selected_port_message
+                        size_hint: 1, 0.1
+                        text: "select a port"
+                    Button:
+                        size_hint: 1, 0.1
+                        text: "Connect"
+                        on_press: root._connect_octoprint()
+            TabbedPanelItem:
+                text: ""
+                id: detail_status_idle
+                Label:
+                    text: "idle"
+            TabbedPanelItem:
+                text: ""
+                id: detail_status_work
+                Label:
+                    text: "Printing"
