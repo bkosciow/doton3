@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from service.widget import Action
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
+import service.comm as comm
 
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'octoprint.kv')
@@ -18,11 +19,19 @@ STATUS_UNKNOWN = "unknown"
 
 
 class DetailPopup(Popup):
+    def __init__(self, **kwargs):
+        self.node_name = kwargs['node_name']
+        del (kwargs['node_name'])
+        super(Popup, self).__init__(**kwargs)
+
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
             Button(
                 text=name,
                 on_press=self._select_port_action,
+                font_size="20sp",
+                height="30dp",
+                size_hint=(1, None),
             )
         )
 
@@ -30,15 +39,35 @@ class DetailPopup(Popup):
         self.ids['detail_selected_port'].text = item.text
         self.ids['detail_selected_port_message'].text = ""
 
+    def _select_baud_action(self, baud):
+        self.ids['detail_selected_baud'].text = str(baud)
+        self.ids['detail_selected_port_message'].text = ""
+
     def _connect_octoprint(self):
         port = self.ids['detail_selected_port'].text
-        print(port)
+        baud = self.ids['detail_selected_baud'].text
         if port == "":
             self.ids['detail_selected_port_message'].text = "select a port"
             return
 
+        if baud == "":
+            self.ids['detail_selected_port_message'].text = "select a baud rate"
+            return
+
         self.ids['detail_selected_port_message'].text = "Connecting"
-        print("connect to" + self.ids['detail_selected_port'].text)
+        message = {
+            'parameters': {
+                'port': port,
+                'baudrate': baud,
+                'node_name': self.node_name
+            },
+            'event': "octoprint.connect"
+        }
+        comm.send(message)
+
+    def reset(self):
+        self.ids['detail_selected_port_message'].text = ""
+
 
 class Octoprint(Widget, StackLayout):
     def __init__(self, **kwargs):
@@ -52,7 +81,7 @@ class Octoprint(Widget, StackLayout):
         self._secondsLeft = None
         self._last_dt = None
         self.event = None
-        self.popup = DetailPopup()
+        self.popup = DetailPopup(node_name=self.node_name)
         self.popup.add_port('/dev/usb0')
         self.popup.add_port('/dev/usb1')
         self.popup.add_port('/dev/acm0')
@@ -64,8 +93,6 @@ class Octoprint(Widget, StackLayout):
         if self.node_name not in values:
             return
         values = values[self.node_name]
-        # print(self.popup.ids["detail_status_printing"].height)
-        # print(self.popup.ids["detail_status_printing"].size_hint)
         if 'connection' in values:
             self.popup.ids['detail_connection'].text = str(values['connection']['port']) + " @ " + str(values['connection']['baudrate'])
 
@@ -155,6 +182,7 @@ class Octoprint(Widget, StackLayout):
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
+            self.popup.reset()
             self.popup.open()
 
     def on_stop(self, a):

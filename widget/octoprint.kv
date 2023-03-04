@@ -193,17 +193,42 @@
                 id: detail_status_dc
                 StackLayout:
                     GridLayout:
-                        padding: 0, 0, 0, 0
+                        padding: 10
                         spacing: 0, 10
                         cols: 1
                         id: detail_port_list
-                        size_hint: 1, 0.3
+                        size_hint: 1, 0.4
+                    GridLayout:
+                        padding: 10
+                        size_hint: 1, 0.1
+                        cols: 2
+                        Button:
+                            text: "115200"
+                            font_size: 20
+                            height: 30
+                            size_hint: 1, None
+                            on_press: root._select_baud_action(115200)
+                        Button:
+                            text: "250000"
+                            font_size: 20
+                            height: 30
+                            size_hint: 1, None
+                            on_press: root._select_baud_action(250000)
                     Label:
                         size_hint: 0.3, 0.1
                         text: "Port: "
                         text_size: self.size
                     Label:
                         id: detail_selected_port
+                        text_size: self.size
+                        size_hint: 0.7, 0.1
+                        text: ""
+                    Label:
+                        size_hint: 0.3, 0.1
+                        text: "Baud: "
+                        text_size: self.size
+                    Label:
+                        id: detail_selected_baud
                         text_size: self.size
                         size_hint: 0.7, 0.1
                         text: ""
