@@ -82,9 +82,9 @@ class Octoprint(Widget, StackLayout):
         self._last_dt = None
         self.event = None
         self.popup = DetailPopup(node_name=self.node_name)
-        self.popup.add_port('/dev/usb0')
-        self.popup.add_port('/dev/usb1')
-        self.popup.add_port('/dev/acm0')
+        self.popup.add_port('/dev/ttyUSB0')
+        self.popup.add_port('/dev/ttyUSB1')
+        self.popup.add_port('/dev/ttyACM0')
 
         # self.popup.ids['detail_btn_stop'].bind(on_press=self.on_stop)
         # self.popup.ids['detail_btn_pause'].bind(on_press=self.on_pause)
@@ -138,7 +138,7 @@ class Octoprint(Widget, StackLayout):
 
     def _update_operational_data(self, values):
         self.error = 0
-        if values['print'] == '':
+        if values['print'] == '' or values['print'] == {}:
             self.printing = 0
         else:
             if 'flags' in values and values['flags']['printing']:
@@ -147,9 +147,7 @@ class Octoprint(Widget, StackLayout):
             if 'completion' in values['print']:
                 self.ids['progress'].text = str(round(values['print']['completion'])) + " %"
                 self.popup.ids['detail_completion'].value = values['print']['completion']
-                # print(values['print']['completion'])
-                # print(values['flags'])
-                if values['print']['completion'] > 99.8:
+                if float(values['print']['completion']) > 99.8:
                     self.done = 1
                     self.printing = 0
                     self.ids['nozzle_temp'].text = ""
