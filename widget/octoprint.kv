@@ -243,8 +243,30 @@
             TabbedPanelItem:
                 text: ""
                 id: detail_status_idle
-                Label:
-                    text: "idle"
+                StackLayout:
+                    Button:
+                        size_hint: 1, 0.1
+                        text: "Refresh"
+                        on_press: root._reload_filelist()
+                    ScrollView:
+                        size_hint: 1, 0.6
+                        #size: 1, 0.5
+                        StackLayout:
+                            height: self.minimum_height
+                            padding: 5
+                            spacing: 0, 5
+                            id: detail_filelist
+                            size: self.size
+                            size_hint_y: None
+                    Label:
+                        id: detail_filelist_selected
+                        size_hint: 1, 0.1
+                        text: "select a file"
+                    Button:
+                        id: detail_filelist_print
+                        size_hint: 1, 0.1
+                        text: "Print"
+                        on_press: root.start_print()
             TabbedPanelItem:
                 text: ""
                 id: detail_status_work

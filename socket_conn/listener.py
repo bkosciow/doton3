@@ -12,6 +12,7 @@ class Listener(Thread):
         self.widgets = {}
         self.connection_error = False
         self.pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}')
+        self.start_message = regex.compile(r'\d+:{')
         self._connect()
 
     def _connect(self):
@@ -20,28 +21,53 @@ class Listener(Thread):
         # host = socket.gethostname()
         self.socket.connect((addr, int(port)))
 
+    def _recv(self):
+        buff = ''
+        buff_len = 0
+        while True:
+            data = self.socket.recv(4096)
+            if data:
+                data = data.decode('utf8')
+                data = data.replace('\n', '')
+                elements = self.start_message.findall(data)
+                if len(elements):
+                    for item in elements:
+                        buff_len = int(item[:-2])
+                        pos = data.find(item)
+                        message = data[pos + len(item) - 1: pos + buff_len + len(item) - 1]
+                        if buff_len == len(message):
+                            yield message
+                        else:
+                            buff = message
+                else:
+                    buff += data
+                    if len(buff) == buff_len:
+                        yield buff
+            else:
+                yield None
+
     def run(self):
         self._initialize_values()
         while self.work:
             try:
-                data = self.socket.recv(8192)
-                if data:
-                    data = data.decode('utf8')
-                    try:
-                        data = self._decode_data(data)
-                        for response in data:
-                            key = list(response)[0]
-                            # print(key)
-                            # if key == 'octoprint':
-                            #     print(response[key])
-                            self._dispatch_data(key, response[key])
-                    except ValueError as e:
-                        print("failed to unjonsonify")
-                        print(data)
-                        print(e)
-                else:
-                    self.work = False
-                    self.connection_error = True
+                for data in self._recv():
+                    # print(">> ", data)
+                    if data:
+                        try:
+                            data = self._decode_data(data)
+                            for response in data:
+                                key = list(response)[0]
+                                # print(key)
+                                # if key == 'octoprint':
+                                #     print(response[key])
+                                self._dispatch_data(key, response[key])
+                        except ValueError as e:
+                            print("failed to unjonsonify")
+                            print(data)
+                            print(e)
+                    else:
+                        self.work = False
+                        self.connection_error = True
 
             except socket.error as e:
                 print("socket crash")

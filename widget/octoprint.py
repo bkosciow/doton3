@@ -6,7 +6,9 @@ from datetime import datetime, timedelta
 from service.widget import Action
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 import service.comm as comm
+from pprint import pprint
 
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'octoprint.kv')
@@ -18,11 +20,69 @@ STATUS_ERROR = "error"
 STATUS_UNKNOWN = "unknown"
 
 
+class FileList:
+    def __init__(self, node_name, container, selection):
+        self.node_name = node_name
+        self.container = container
+        self.selection = selection
+        self.initialized = False
+        self.ts = 0
+        self.list = {}
+        self.current_dir = ""
+        self.selected_path = ""
+
+    def build_filelist(self, data):
+        self.current_dir = ""
+        self.list = data['list']
+        self.ts = data['ts']
+
+    def message_get_files(self):
+        message = {
+            'parameters': {
+                'node_name': self.node_name
+            },
+            'event': "octoprint.get_filelist"
+        }
+        comm.send(message)
+
+    def _get_font_size(self, text):
+        if len(text) < 23:
+            return "20sp"
+        elif len(text) < 30:
+            return "16sp"
+        elif len(text) < 40:
+            return "13sp"
+
+        return "10sp"
+
+    def display_filelist(self):
+        self.initialized = True
+        for item in self.list:
+            a = Button(
+                text=item['path'],
+                size_hint_y=None,
+                height="30dp",
+                font_size=self._get_font_size(item['path']),
+                on_press=self._select_file_filelist,
+            )
+            self.container.add_widget(a)
+
+    def _select_file_filelist(self, item):
+        self.selection.text = item.text
+        self.selection.font_size = item.font_size
+        self.selected_path = item.text
+
+    def reset_selection(self):
+        self.selection.text = ""
+        self.selected_path = ""
+
+
 class DetailPopup(Popup):
     def __init__(self, **kwargs):
         self.node_name = kwargs['node_name']
         del (kwargs['node_name'])
         super(Popup, self).__init__(**kwargs)
+        self.filelist = FileList(self.node_name, self.ids['detail_filelist'], self.ids['detail_filelist_selected'])
 
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
@@ -67,6 +127,37 @@ class DetailPopup(Popup):
 
     def reset(self):
         self.ids['detail_selected_port_message'].text = ""
+        if not self.filelist.initialized:
+            self._reload_filelist()
+
+    def _reload_filelist(self):
+        self.ids['detail_filelist'].clear_widgets()
+        self.ids['detail_filelist_selected'].text = "select a file"
+        self.filelist.ts = 0
+        self.filelist.message_get_files()
+
+    def build_filelist(self, data):
+        self.filelist.build_filelist(data)
+        self.filelist.display_filelist()
+
+    def start_print(self):
+        if self.filelist.selected_path == "":
+            warning = Popup(
+                title="no file selected",
+                content=Label(text="Select a file first.", font_size="30sp"),
+                size_hint=(0.5, 0.5)
+            )
+            warning.open()
+        else:
+            message = {
+                'parameters': {
+                    'node_name': self.node_name,
+                    'path': self.filelist.selected_path
+                },
+                'event': "octoprint.print_start"
+            }
+            self.filelist.reset_selection()
+            comm.send(message)
 
 
 class Octoprint(Widget, StackLayout):
@@ -78,16 +169,11 @@ class Octoprint(Widget, StackLayout):
         del(kwargs['node_name'])
         super(StackLayout, self).__init__(**kwargs)
         self.ids['printer_name'].text = self.printer_name
-        self._secondsLeft = None
-        self._last_dt = None
         self.event = None
         self.popup = DetailPopup(node_name=self.node_name)
         self.popup.add_port('/dev/ttyUSB0')
         self.popup.add_port('/dev/ttyUSB1')
         self.popup.add_port('/dev/ttyACM0')
-
-        # self.popup.ids['detail_btn_stop'].bind(on_press=self.on_stop)
-        # self.popup.ids['detail_btn_pause'].bind(on_press=self.on_pause)
 
     def update_values(self, values, name):
         if self.node_name not in values:
@@ -99,11 +185,16 @@ class Octoprint(Widget, StackLayout):
         if 'octoprint' in values:
             self.popup.ids['detail_octoprint'].text = str(values['octoprint'])
 
-        if values['error']:
-            self._update_error_data(values)
-        else:
-            self._update_operational_data(values)
+        if 'files' in values:
+            self.popup.build_filelist(values['files'])
+
+        if 'error' in values:
+            if values['error']:
+                self._update_error_data(values)
+            else:
+                self._update_operational_data(values)
         # print(values)
+
         if 'octoprint' in values and values['octoprint']:
             if values['connection']['port'] is None:
                 self.popup.status = STATUS_DISCONNECTED
@@ -116,7 +207,8 @@ class Octoprint(Widget, StackLayout):
         else:
             self.popup.status = STATUS_UNKNOWN
 
-        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
+        #self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
+        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_idle'])
 
     def _update_error_data(self, values):
         self.printing = 0
