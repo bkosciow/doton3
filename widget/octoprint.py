@@ -33,8 +33,9 @@ class FileList:
 
     def build_filelist(self, data):
         self.current_dir = ""
-        self.list = data['list']
-        self.ts = data['ts']
+        if self.ts < data['ts']:
+            self.list = data['list']
+            self.ts = data['ts']
 
     def message_get_files(self):
         message = {
