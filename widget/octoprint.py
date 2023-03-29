@@ -36,6 +36,7 @@ class FileList:
         if self.ts < data['ts']:
             self.list = data['list']
             self.ts = data['ts']
+            self.initialized = False
 
     def message_get_files(self):
         message = {
@@ -57,16 +58,17 @@ class FileList:
         return "10sp"
 
     def display_filelist(self):
-        self.initialized = True
-        for item in self.list:
-            a = Button(
-                text=item['path'],
-                size_hint_y=None,
-                height="30dp",
-                font_size=self._get_font_size(item['path']),
-                on_press=self._select_file_filelist,
-            )
-            self.container.add_widget(a)
+        if not self.initialized:
+            self.initialized = True
+            for item in self.list:
+                a = Button(
+                    text=item['path'],
+                    size_hint_y=None,
+                    height="30dp",
+                    font_size=self._get_font_size(item['path']),
+                    on_press=self._select_file_filelist,
+                )
+                self.container.add_widget(a)
 
     def _select_file_filelist(self, item):
         self.selection.text = item.text
