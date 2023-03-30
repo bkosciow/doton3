@@ -105,6 +105,7 @@
     title: ""
     size_hint: 0.7, 0.8
     status: "unknown"
+    print_paused: False
     GridLayout:
         cols: 2
         StackLayout:
@@ -161,20 +162,7 @@
                 id: detail_print_time_left
                 size_hint: 0.7, 0.1
                 text_size: self.size
-            Label:
-                size_hint: 1, 0.1
-            Button:
-                id: detail_btn_print
-                size_hint: 0.33, 0.1
-                text: "Print"
-            Button:
-                id: detail_btn_stop
-                size_hint: 0.33, 0.1
-                text: "STOP"
-            Button:
-                id: detail_btn_pause
-                size_hint: 0.33, 0.1
-                text: "Pause"
+
         TabbedPanel:
             id: detail_status_tabs
             do_default_tab: False
@@ -270,5 +258,20 @@
             TabbedPanelItem:
                 text: ""
                 id: detail_status_work
-                Label:
-                    text: "Printing"
+                StackLayout:
+                    padding: 5
+                    Button:
+                        id: detail_pause_resume
+                        size_hint: 1, 0.1
+                        text: "Pause" if not root.print_paused else "Resume"
+                        height: "40dp"
+                        font_size: "20sp"
+                        on_press: root.print_pause_resume()
+                    Label:
+                        size_hint: 1, 0.04
+                    Button:
+                        size_hint: 1, 0.1
+                        text: "Stop"
+                        height: "40dp"
+                        font_size: "20sp"
+                        on_press: root.print_stop()

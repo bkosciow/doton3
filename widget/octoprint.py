@@ -3,6 +3,7 @@ from kivy.lang import Builder
 import pathlib
 from service.widget import Widget
 from datetime import datetime, timedelta
+from view.popup_confirm import ConfirmationPopup
 from service.widget import Action
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
@@ -86,6 +87,7 @@ class DetailPopup(Popup):
         del (kwargs['node_name'])
         super(Popup, self).__init__(**kwargs)
         self.filelist = FileList(self.node_name, self.ids['detail_filelist'], self.ids['detail_filelist_selected'])
+        self.confirmation_popup = ConfirmationPopup()
 
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
@@ -162,6 +164,49 @@ class DetailPopup(Popup):
             self.filelist.reset_selection()
             comm.send(message)
 
+    def print_pause_resume(self):
+        if self.print_paused:
+            self.confirmation_popup.callback = self._send_resume
+            self.confirmation_popup.text = "Resume current print?"
+
+        else:
+            self.confirmation_popup.callback = self._send_pause
+            self.confirmation_popup.text = "Pause current print?"
+
+        self.confirmation_popup.show()
+
+    def print_stop(self):
+        self.confirmation_popup.callback = self._send_stop
+        self.confirmation_popup.text = "Stop current print?"
+        self.confirmation_popup.show()
+
+    def _send_stop(self):
+        message = {
+            'parameters': {
+                'node_name': self.node_name,
+            },
+            'event': "octoprint.print_stop"
+        }
+        comm.send(message)
+
+    def _send_pause(self):
+        message = {
+            'parameters': {
+                'node_name': self.node_name,
+            },
+            'event': "octoprint.print_pause"
+        }
+        comm.send(message)
+
+    def _send_resume(self):
+        message = {
+            'parameters': {
+                'node_name': self.node_name,
+            },
+            'event': "octoprint.print_resume"
+        }
+        comm.send(message)
+
 
 class Octoprint(Widget, StackLayout):
     def __init__(self, **kwargs):
@@ -174,6 +219,7 @@ class Octoprint(Widget, StackLayout):
         self.ids['printer_name'].text = self.printer_name
         self.event = None
         self.popup = DetailPopup(node_name=self.node_name)
+        # self.popup.add_port('VIRTUAL')
         self.popup.add_port('/dev/ttyUSB0')
         self.popup.add_port('/dev/ttyUSB1')
         self.popup.add_port('/dev/ttyACM0')
@@ -196,7 +242,6 @@ class Octoprint(Widget, StackLayout):
                 self._update_error_data(values)
             else:
                 self._update_operational_data(values)
-        # print(values)
 
         if 'octoprint' in values and values['octoprint']:
             if values['connection']['port'] is None:
@@ -210,8 +255,8 @@ class Octoprint(Widget, StackLayout):
         else:
             self.popup.status = STATUS_UNKNOWN
 
-        #self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
-        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_idle'])
+        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
+        # self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_work'])
 
     def _update_error_data(self, values):
         self.printing = 0
@@ -233,12 +278,17 @@ class Octoprint(Widget, StackLayout):
 
     def _update_operational_data(self, values):
         self.error = 0
-        if values['print'] == '' or values['print'] == {}:
+        paused = True if 'flags' in values and (values['flags']['paused'] or values['flags']['pausing']) else False
+        if (values['print'] == '' or values['print'] == {}) and not paused:
             self.printing = 0
         else:
-            if 'flags' in values and values['flags']['printing']:
-                self.printing = 1
-                self.done = 0
+            if 'flags' in values:
+                if values['flags']['printing']:
+                    self.printing = 1
+                    self.done = 0
+                if values['flags']['paused'] != self.popup.print_paused:
+                    self.printing = 1
+                    self.popup.print_paused = values['flags']['paused']
             if 'completion' in values['print']:
                 self.ids['progress'].text = str(round(values['print']['completion'])) + " %"
                 self.popup.ids['detail_completion'].value = values['print']['completion']
@@ -277,9 +327,3 @@ class Octoprint(Widget, StackLayout):
         if self.collide_point(*touch.pos):
             self.popup.reset()
             self.popup.open()
-
-    def on_stop(self, a):
-        print(a)
-
-    def on_pause(self, a):
-        print(a)
