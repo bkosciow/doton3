@@ -162,6 +162,13 @@
                 id: detail_print_time_left
                 size_hint: 0.7, 0.1
                 text_size: self.size
+            Label:
+                size_hint: 1, 0.1
+            Button:
+                size_hint: 0.5, 0.1
+                text: "Options"
+                font_size: "16sp"
+                on_press: root._show_settings()
 
         TabbedPanel:
             id: detail_status_tabs
@@ -275,3 +282,42 @@
                         height: "40dp"
                         font_size: "20sp"
                         on_press: root.print_stop()
+            TabbedPanelItem:
+                text: ""
+                id: detail_status_options
+                StackLayout:
+                    Label:
+                        size_hint: 0.7, 0.1
+                        text: "Shutdown after done"
+                        text_size: self.size
+                    ToggleButton:
+                        text: "Yes"
+                        id: option_shutdown_after_done
+                        size_hint: 0.3, 0.1
+
+                    Label:
+                        size_hint: 1, 0.1
+
+                    Label:
+                        size_hint: 0.7, 0.1
+                        text: "Sort"
+                        text_size: self.size
+                    ToggleButton:
+                        size_hint: 0.3, 0.1
+                        text: "Default"
+                        id: option_sort_default
+                        group: "sort_options"
+                    Label:
+                        size_hint: 0.7, 0.1
+                    ToggleButton:
+                        size_hint: 0.3, 0.1
+                        text: "Name"
+                        id: option_sort_name
+                        group: "sort_options"
+
+                    Label:
+                        size_hint: 0.7, 0.1
+                    Button:
+                        size_hint: 0.7, 0.1
+                        text: "Save"
+                        on_press: root.save_settings()

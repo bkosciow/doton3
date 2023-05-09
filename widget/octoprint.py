@@ -21,11 +21,19 @@ STATUS_ERROR = "error"
 STATUS_UNKNOWN = "unknown"
 
 
+class Settings:
+    def __init__(self):
+        self.sort = "name"
+        self.sort_values = ["default", "name"]
+        self.shutdown_after_done = False
+
+
 class FileList:
-    def __init__(self, node_name, container, selection):
+    def __init__(self, node_name, settings, container, selection):
         self.node_name = node_name
         self.container = container
         self.selection = selection
+        self.settings = settings
         self.initialized = False
         self.ts = 0
         self.list = {}
@@ -85,9 +93,18 @@ class DetailPopup(Popup):
     def __init__(self, **kwargs):
         self.node_name = kwargs['node_name']
         del (kwargs['node_name'])
+        self.settings = kwargs['settings']
+        del (kwargs['settings'])
         super(Popup, self).__init__(**kwargs)
-        self.filelist = FileList(self.node_name, self.ids['detail_filelist'], self.ids['detail_filelist_selected'])
+        self.filelist = FileList(
+            self.node_name,
+            self.settings,
+            self.ids['detail_filelist'],
+            self.ids['detail_filelist_selected']
+        )
         self.confirmation_popup = ConfirmationPopup()
+        self.setting_open = False
+        self.tab_open = None
 
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
@@ -99,6 +116,28 @@ class DetailPopup(Popup):
                 size_hint=(1, None),
             )
         )
+
+    def _show_settings(self):
+        self.ids['option_shutdown_after_done'].state = "down" if self.settings.shutdown_after_done else "normal"
+        for v in self.settings.sort_values:
+            w = self.ids['option_sort_'+v]
+            w.state = "down" if w.text.lower() == self.settings.sort else "normal"
+        self.ids['detail_status_tabs'].switch_to(self.ids['detail_status_options'])
+        self.setting_open = True
+
+    def save_settings(self):
+        for v in self.settings.sort_values:
+            w = self.ids['option_sort_'+v]
+            if w.state == "down":
+                self.settings.sort = w.text.lower()
+        self.settings.shutdown_after_done = True if self.ids['option_shutdown_after_done'].state == "down" else False
+        self.setting_open = False
+        self.change_panel(self.tab_open)
+
+    def change_panel(self, panel_id):
+        self.tab_open = panel_id
+        if not self.setting_open:
+            self.ids['detail_status_tabs'].switch_to(self.ids[panel_id])
 
     def _select_port_action(self, item):
         self.ids['detail_selected_port'].text = item.text
@@ -216,10 +255,11 @@ class Octoprint(Widget, StackLayout):
         self.node_name = kwargs['node_name']
         del(kwargs['node_name'])
         super(StackLayout, self).__init__(**kwargs)
+        self.settings = Settings()
         self.ids['printer_name'].text = self.printer_name
         self.event = None
-        self.popup = DetailPopup(node_name=self.node_name)
-        # self.popup.add_port('VIRTUAL')
+        self.popup = DetailPopup(node_name=self.node_name, settings=self.settings)
+        self.popup.add_port('VIRTUAL')
         self.popup.add_port('/dev/ttyUSB0')
         self.popup.add_port('/dev/ttyUSB1')
         self.popup.add_port('/dev/ttyACM0')
@@ -255,7 +295,7 @@ class Octoprint(Widget, StackLayout):
         else:
             self.popup.status = STATUS_UNKNOWN
 
-        self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_'+self.popup.status])
+        self.popup.change_panel('detail_status_'+self.popup.status)
         # self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_work'])
 
     def _update_error_data(self, values):
