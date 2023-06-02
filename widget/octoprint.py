@@ -36,9 +36,10 @@ class FileList:
         self.settings = settings
         self.initialized = False
         self.ts = 0
-        self.list = {}
+        self.list = []
         self.current_dir = ""
         self.selected_path = ""
+        self.current_sort = settings.sort
 
     def build_filelist(self, data):
         self.current_dir = ""
@@ -67,9 +68,11 @@ class FileList:
         return "10sp"
 
     def display_filelist(self):
-        if not self.initialized:
+        if not self.initialized or self.current_sort != self.settings.sort:
+            self.container.clear_widgets()
             self.initialized = True
-            for item in self.list:
+            self.current_sort = self.settings.sort
+            for item in self._get_sorted_list(self.list):
                 a = Button(
                     text=item['path'],
                     size_hint_y=None,
@@ -78,6 +81,12 @@ class FileList:
                     on_press=self._select_file_filelist,
                 )
                 self.container.add_widget(a)
+
+    def _get_sorted_list(self, file_list):
+        if self.settings.sort == "name":
+            return sorted(file_list, key=lambda x: x['display'])
+
+        return file_list
 
     def _select_file_filelist(self, item):
         self.selection.text = item.text
@@ -133,6 +142,7 @@ class DetailPopup(Popup):
         self.settings.shutdown_after_done = True if self.ids['option_shutdown_after_done'].state == "down" else False
         self.setting_open = False
         self.change_panel(self.tab_open)
+        self.filelist.display_filelist()
 
     def change_panel(self, panel_id):
         self.tab_open = panel_id
