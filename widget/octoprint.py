@@ -10,6 +10,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 import service.comm as comm
 from pprint import pprint
+from kivy.clock import Clock
 
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'octoprint.kv')
@@ -25,7 +26,10 @@ class Settings:
     def __init__(self):
         self.sort = "name"
         self.sort_values = ["default", "name"]
-        self.shutdown_after_done = False
+        self.shutdown_after_done = True
+        self.shutdown_after_dc = True
+        self.shutdown_time = 60
+        # self.shutdown_min_temp = 50  # only when done
 
 
 class FileList:
@@ -128,6 +132,7 @@ class DetailPopup(Popup):
 
     def _show_settings(self):
         self.ids['option_shutdown_after_done'].state = "down" if self.settings.shutdown_after_done else "normal"
+        self.ids['option_shutdown_after_dc'].state = "down" if self.settings.shutdown_after_dc else "normal"
         for v in self.settings.sort_values:
             w = self.ids['option_sort_'+v]
             w.state = "down" if w.text.lower() == self.settings.sort else "normal"
@@ -140,6 +145,7 @@ class DetailPopup(Popup):
             if w.state == "down":
                 self.settings.sort = w.text.lower()
         self.settings.shutdown_after_done = True if self.ids['option_shutdown_after_done'].state == "down" else False
+        self.settings.shutdown_after_dc = True if self.ids['option_shutdown_after_dc'].state == "down" else False
         self.setting_open = False
         self.change_panel(self.tab_open)
         self.filelist.display_filelist()
@@ -268,6 +274,9 @@ class Octoprint(Widget, StackLayout):
         self.settings = Settings()
         self.ids['printer_name'].text = self.printer_name
         self.event = None
+        self.was_printing = 0
+        self.timer = None
+        self.timer_tick = 0
         self.popup = DetailPopup(node_name=self.node_name, settings=self.settings)
         self.popup.add_port('VIRTUAL')
         self.popup.add_port('/dev/ttyUSB0')
@@ -309,6 +318,8 @@ class Octoprint(Widget, StackLayout):
         # self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_work'])
 
     def _update_error_data(self, values):
+        if self.printing == 1:
+            self.was_printing = 1
         self.printing = 0
         self.ids['nozzle_temp'].text = ""
         self.ids['bed_temp'].text = ""
@@ -321,6 +332,10 @@ class Octoprint(Widget, StackLayout):
             self.ids['status'].text = values['status']
             self.popup.title = self.printer_name + " -- " + values['error_message']
             self.popup.ids['detail_status'].text = values['error_message']
+            if values['status'] == "D/C" and self.was_printing == 1:
+                if self.settings.shutdown_after_dc:
+                    self.start_shutdown_timer()
+                self.was_printing = 0
         else:
             self.popup.ids['detail_status'].text = values['status']
             self.ids['status'].text = "OFFLINE"
@@ -349,6 +364,8 @@ class Octoprint(Widget, StackLayout):
                     self.ids['bed_temp'].text = ""
                     self.ids['printer_times'].text = ""
                     self.ids['progress'].text = ""
+                    if self.settings.shutdown_after_done:
+                        self.start_shutdown_timer()
 
             if 'printTimeLeft' in values['print']:
                 self.ids['printer_times'].text = ':'.join(
@@ -375,5 +392,27 @@ class Octoprint(Widget, StackLayout):
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            self.popup.reset()
-            self.popup.open()
+            if self.timer:
+                Clock.unschedule(self.timer)
+                self.timer = None
+            else:
+                self.popup.reset()
+                self.popup.open()
+
+    def start_shutdown_timer(self):
+        self.timer_tick = self.settings.shutdown_time
+        if self.done == 1:
+            self.timer_tick *= 2
+        if self.timer:
+            Clock.unschedule(self.timer)
+            self.timer = None
+        self.timer = Clock.schedule_interval(self.tick_shutdown_timer, 1)
+
+    def tick_shutdown_timer(self, dt):
+        if self.timer_tick == 0:
+            print("STOP")
+            return False
+        self.timer_tick -= 1
+        self.ids['status'].text = str(self.timer_tick)
+        return True
+

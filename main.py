@@ -57,6 +57,7 @@ class DotonApp(App):
 
         upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
+
         # power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1, confirm=True)
         # powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0, confirm=True)
 
@@ -74,9 +75,11 @@ class DotonApp(App):
         layout.add_widget(lowerLight)
         layout.add_widget(upperLight)
         # layout.add_widget(power5pro)
+
         layout.add_widget(octo_e5pro)
         layout.add_widget(octo_e5plus)
         layout.add_widget(octo_cr6se)
+
         # layout.add_widget(powerCr6se)
         # layout.add_widget(power5plus)
         layout.add_widget(box2Light2)
@@ -95,9 +98,11 @@ class DotonApp(App):
         listener.add_widget('openaq', air_quality)
         # listener.add_widget('node-ce6cr', cr6se)
         # listener.add_widget('node-ender5pro', ender5pro)
+
         listener.add_widget('octoprint', octo_e5pro)
         listener.add_widget('octoprint', octo_e5plus)
         listener.add_widget('octoprint', octo_cr6se)
+
         # listener.add_widget('node-ender5plus', ender5plus)
 
         listener.add_widget('node-printers', lowerLight)
