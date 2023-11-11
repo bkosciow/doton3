@@ -269,6 +269,9 @@ class Octoprint(Widget, StackLayout):
         if self.printer_name:
             del(kwargs['printer_name'])
         self.node_name = kwargs['node_name']
+        self.callbacks = {
+            'shutdown': None,
+        }
         del(kwargs['node_name'])
         super(StackLayout, self).__init__(**kwargs)
         self.settings = Settings()
@@ -282,6 +285,11 @@ class Octoprint(Widget, StackLayout):
         self.popup.add_port('/dev/ttyUSB0')
         self.popup.add_port('/dev/ttyUSB1')
         self.popup.add_port('/dev/ttyACM0')
+
+    def add_callback(self, name, fun):
+        if name not in self.callbacks:
+            raise Exception('Octoprint callback not found')
+        self.callbacks[name] = fun
 
     def update_values(self, values, name):
         if self.node_name not in values:
@@ -334,7 +342,7 @@ class Octoprint(Widget, StackLayout):
             self.popup.ids['detail_status'].text = values['error_message']
             if values['status'] == "D/C" and self.was_printing == 1:
                 if self.settings.shutdown_after_dc:
-                    self.start_shutdown_timer()
+                    self.start_shutdown_timer(self.settings.shutdown_time)
                 self.was_printing = 0
         else:
             self.popup.ids['detail_status'].text = values['status']
@@ -365,7 +373,7 @@ class Octoprint(Widget, StackLayout):
                     self.ids['printer_times'].text = ""
                     self.ids['progress'].text = ""
                     if self.settings.shutdown_after_done:
-                        self.start_shutdown_timer()
+                        self.start_shutdown_timer(2 * self.settings.shutdown_time)
 
             if 'printTimeLeft' in values['print']:
                 self.ids['printer_times'].text = ':'.join(
@@ -399,10 +407,8 @@ class Octoprint(Widget, StackLayout):
                 self.popup.reset()
                 self.popup.open()
 
-    def start_shutdown_timer(self):
-        self.timer_tick = self.settings.shutdown_time
-        if self.done == 1:
-            self.timer_tick *= 2
+    def start_shutdown_timer(self, shutdown_time):
+        self.timer_tick = shutdown_time
         if self.timer:
             Clock.unschedule(self.timer)
             self.timer = None
@@ -410,7 +416,8 @@ class Octoprint(Widget, StackLayout):
 
     def tick_shutdown_timer(self, dt):
         if self.timer_tick == 0:
-            print("STOP")
+            if self.callbacks['shutdown']:
+                self.callbacks['shutdown']()
             return False
         self.timer_tick -= 1
         self.ids['status'].text = str(self.timer_tick)

@@ -51,7 +51,18 @@ class DotonApp(App):
         # ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
         # ender5plus = Printer3D(pos=(0, 50), printer_name='E5+')
 
+        def completed_e5pro():
+            message = {
+                'parameters': {
+                    'channel': 3,
+                },
+                'targets': ['node-relaybox2'],
+                'event': "channel.off"
+            }
+            comm.send(message)
+
         octo_e5pro = Octoprint(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+        octo_e5pro.add_callback('shutdown', completed_e5pro)
         octo_cr6se = Octoprint(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
         octo_e5plus = Octoprint(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
 
