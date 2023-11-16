@@ -17,7 +17,7 @@ STATUS_ERROR = "error"
 STATUS_UNKNOWN = "unknown"
 
 
-class Octoprint(Widget, StackLayout):
+class PrinterControl(Widget, StackLayout):
     def __init__(self, **kwargs):
         self.printer_name = kwargs['printer_name'] if 'printer_name' in kwargs else None
         if self.printer_name:
@@ -42,7 +42,7 @@ class Octoprint(Widget, StackLayout):
 
     def add_callback(self, name, fun):
         if name not in self.callbacks:
-            raise Exception('Octoprint callback not found')
+            raise Exception('PrinterControl callback not found')
         self.callbacks[name] = fun
 
     def update_values(self, values, name):

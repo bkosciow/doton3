@@ -29,7 +29,7 @@ from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
 from widget.printer_3d import Printer3D
-from widget.printer_3d_adv import Octoprint
+from widget.printer_3d_adv import PrinterControl
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 
@@ -61,10 +61,10 @@ class DotonApp(App):
             }
             comm.send(message)
 
-        octo_e5pro = Octoprint(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+        octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
         octo_e5pro.add_callback('shutdown', completed_e5pro)
-        octo_cr6se = Octoprint(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
-        octo_e5plus = Octoprint(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
+        octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
+        octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
 
         upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
