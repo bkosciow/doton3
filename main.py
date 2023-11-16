@@ -29,7 +29,7 @@ from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
 from widget.printer_3d import Printer3D
-from widget.octoprint import Octoprint
+from widget.printer_3d_adv import Octoprint
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 
@@ -110,9 +110,9 @@ class DotonApp(App):
         # listener.add_widget('node-ce6cr', cr6se)
         # listener.add_widget('node-ender5pro', ender5pro)
 
-        listener.add_widget('octoprint', octo_e5pro)
-        listener.add_widget('octoprint', octo_e5plus)
-        listener.add_widget('octoprint', octo_cr6se)
+        listener.add_widget('3dprinters', octo_e5pro)
+        listener.add_widget('3dprinters', octo_e5plus)
+        listener.add_widget('3dprinters', octo_cr6se)
 
         # listener.add_widget('node-ender5plus', ender5plus)
 
