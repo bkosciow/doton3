@@ -29,7 +29,7 @@ from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
 from widget.printer_3d import Printer3D
-from widget.printer_3d_adv import PrinterControl
+from widget.printer_control import PrinterControl
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 

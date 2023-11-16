@@ -67,7 +67,7 @@ class DetailPopup(Popup):
         self.ids['detail_selected_baud'].text = str(baud)
         self.ids['detail_selected_port_message'].text = ""
 
-    def _connect_octoprint(self):
+    def _connect_printer(self):
         port = self.ids['detail_selected_port'].text
         baud = self.ids['detail_selected_baud'].text
         if port == "":

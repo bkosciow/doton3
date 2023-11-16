@@ -8,7 +8,7 @@ from kivy.clock import Clock
 from printer.settings_model import Settings
 from printer.detail_popup import DetailPopup
 
-Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'printer_3d_adv.kv')
+Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'printer_control.kv')
 
 STATUS_IDLE = "idle"
 STATUS_PRINTING = "work"
@@ -57,7 +57,7 @@ class PrinterControl(Widget, StackLayout):
             self.popup.ids['detail_connection'].text = str(values['connection']['port']) + " @ " + str(values['connection']['baudrate'])
 
         if 'version' in values:
-            self.popup.ids['detail_octoprint'].text = str(values['version'])
+            self.popup.ids['detail_printer'].text = str(values['version'])
 
         if 'files' in values:
             self.popup.build_filelist(values['files'])
