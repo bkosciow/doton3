@@ -4,6 +4,7 @@ from printer.file_list import FileList
 from view.popup_confirm import ConfirmationPopup
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from printer.messages_octoprint import CommunicationMessages
 
 
 class DetailPopup(Popup):
@@ -22,6 +23,7 @@ class DetailPopup(Popup):
         self.confirmation_popup = ConfirmationPopup()
         self.setting_open = False
         self.tab_open = None
+        self.communication = CommunicationMessages()
 
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
@@ -79,14 +81,7 @@ class DetailPopup(Popup):
             return
 
         self.ids['detail_selected_port_message'].text = "Connecting"
-        message = {
-            'parameters': {
-                'port': port,
-                'baudrate': baud,
-                'node_name': self.node_name
-            },
-            'event': "octoprint.connect"
-        }
+        message = self.communication.connect(port, baud, self.node_name)
         comm.send(message)
 
     def reset(self):
@@ -113,13 +108,7 @@ class DetailPopup(Popup):
             )
             warning.open()
         else:
-            message = {
-                'parameters': {
-                    'node_name': self.node_name,
-                    'path': self.filelist.selected_path
-                },
-                'event': "octoprint.print_start"
-            }
+            message = self.communication.start_print(self.filelist.selected_path, self.node_name)
             self.filelist.reset_selection()
             comm.send(message)
 
@@ -140,28 +129,13 @@ class DetailPopup(Popup):
         self.confirmation_popup.show()
 
     def _send_stop(self):
-        message = {
-            'parameters': {
-                'node_name': self.node_name,
-            },
-            'event': "octoprint.print_stop"
-        }
+        message = self.communication.stop_print(self.node_name)
         comm.send(message)
 
     def _send_pause(self):
-        message = {
-            'parameters': {
-                'node_name': self.node_name,
-            },
-            'event': "octoprint.print_pause"
-        }
+        message = self.communication.pause_print(self.node_name)
         comm.send(message)
 
     def _send_resume(self):
-        message = {
-            'parameters': {
-                'node_name': self.node_name,
-            },
-            'event': "octoprint.print_resume"
-        }
+        message = self.communication.resume_print(self.node_name)
         comm.send(message)
