@@ -1,6 +1,8 @@
 from kivy.uix.stacklayout import StackLayout
 from kivy.lang import Builder
 import pathlib
+import importlib
+import importlib.util
 from service.widget import Widget
 from datetime import datetime, timedelta
 from pprint import pprint
@@ -34,11 +36,20 @@ class PrinterControl(Widget, StackLayout):
         self.was_printing = 0
         self.timer = None
         self.timer_tick = 0
+        self.configured = False
+
         self.popup = DetailPopup(node_name=self.node_name, settings=self.settings)
-        self.popup.add_port('VIRTUAL')
-        self.popup.add_port('/dev/ttyUSB0')
-        self.popup.add_port('/dev/ttyUSB1')
-        self.popup.add_port('/dev/ttyACM0')
+
+    def _configure(self, values):
+        self.configured = True
+        if values['type'] == "octoprint":
+            from printer.octopring_cfg import Config
+        elif values['type'] == "klipper":
+            from printer.klipper_cfg import Config
+        else:
+            raise Exception(values['type'] + "not supported")
+        cfg = Config()
+        cfg.configure(self)
 
     def add_callback(self, name, fun):
         if name not in self.callbacks:
@@ -52,6 +63,9 @@ class PrinterControl(Widget, StackLayout):
         values = values[self.node_name]
         if self.node_name == "ender5plus":
             print(values)
+
+        if not self.configured:
+            self._configure(values)
 
         if 'connection' in values:
             self.popup.ids['detail_connection'].text = str(values['connection']['port']) + " @ " + str(values['connection']['baudrate'])
