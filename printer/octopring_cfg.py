@@ -1,3 +1,4 @@
+from printer.messages_octoprint import CommunicationMessages
 
 
 class Config:
@@ -9,3 +10,4 @@ class Config:
         printer.popup.add_port('/dev/ttyUSB0')
         printer.popup.add_port('/dev/ttyUSB1')
         printer.popup.add_port('/dev/ttyACM0')
+        printer.popup.communication = CommunicationMessages()

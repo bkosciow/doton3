@@ -1,10 +1,8 @@
-import service.comm as comm
 from kivy.uix.popup import Popup
 from printer.file_list import FileList
 from view.popup_confirm import ConfirmationPopup
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-from printer.messages_octoprint import CommunicationMessages
 
 
 class DetailPopup(Popup):
@@ -23,7 +21,7 @@ class DetailPopup(Popup):
         self.confirmation_popup = ConfirmationPopup()
         self.setting_open = False
         self.tab_open = None
-        self.communication = CommunicationMessages()
+        self.communication = None
 
     def add_port(self, name):
         self.ids['detail_port_list'].add_widget(
@@ -82,7 +80,7 @@ class DetailPopup(Popup):
 
         self.ids['detail_selected_port_message'].text = "Connecting"
         message = self.communication.connect(port, baud, self.node_name)
-        comm.send(message)
+        self.communication.send(message)
 
     def reset(self):
         self.ids['detail_selected_port_message'].text = ""
@@ -110,7 +108,7 @@ class DetailPopup(Popup):
         else:
             message = self.communication.start_print(self.filelist.selected_path, self.node_name)
             self.filelist.reset_selection()
-            comm.send(message)
+            self.communication.send(message)
 
     def print_pause_resume(self):
         if self.print_paused:
@@ -130,12 +128,12 @@ class DetailPopup(Popup):
 
     def _send_stop(self):
         message = self.communication.stop_print(self.node_name)
-        comm.send(message)
+        self.communication.send(message)
 
     def _send_pause(self):
         message = self.communication.pause_print(self.node_name)
-        comm.send(message)
+        self.communication.send(message)
 
     def _send_resume(self):
         message = self.communication.resume_print(self.node_name)
-        comm.send(message)
+        self.communication.send(message)

@@ -1,3 +1,4 @@
+from printer.messages_klipper import CommunicationMessages
 
 
 class Config:
@@ -5,4 +6,4 @@ class Config:
         pass
 
     def configure(self, printer):
-        pass
+        printer.popup.communication = CommunicationMessages()
