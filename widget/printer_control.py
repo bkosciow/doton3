@@ -61,8 +61,6 @@ class PrinterControl(Widget, StackLayout):
             return
 
         values = values[self.node_name]
-        # if self.node_name == "ender5plus":
-        print(values)
 
         if not self.configured:
             self._configure(values)
