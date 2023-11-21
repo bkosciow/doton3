@@ -16,6 +16,14 @@ class CommunicationMessages:
             'event': "octoprint.connect"
         }
 
+    def get_filelist(self, node_name):
+        return {
+            'parameters': {
+                'node_name': node_name
+            },
+            'event': "octoprint.get_filelist"
+        }
+
     def start_print(self, selected_path, node_name):
         return {
             'parameters': {

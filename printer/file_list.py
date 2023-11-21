@@ -1,4 +1,3 @@
-import service.comm as comm
 from kivy.uix.button import Button
 
 
@@ -14,6 +13,7 @@ class FileList:
         self.current_dir = ""
         self.selected_path = ""
         self.current_sort = settings.sort
+        self.communication = None
 
     def build_filelist(self, data):
         self.current_dir = ""
@@ -23,13 +23,15 @@ class FileList:
             self.initialized = False
 
     def message_get_files(self):
-        message = {
-            'parameters': {
-                'node_name': self.node_name
-            },
-            'event': "octoprint.get_filelist"
-        }
-        comm.send(message)
+        message = self.communication.get_filelist(self.node_name)
+        self.communication.send(message)
+        # message = {
+        #     'parameters': {
+        #         'node_name': self.node_name
+        #     },
+        #     'event': "octoprint.get_filelist"
+        # }
+        # comm.send(message)
 
     def _get_font_size(self, text):
         if len(text) < 23:

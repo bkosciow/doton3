@@ -7,3 +7,4 @@ class Config:
 
     def configure(self, printer):
         printer.popup.communication = CommunicationMessages()
+        printer.popup.filelist.communication = printer.popup.communication

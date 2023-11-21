@@ -62,7 +62,7 @@ class PrinterControl(Widget, StackLayout):
 
         values = values[self.node_name]
         # if self.node_name == "ender5plus":
-        #     print(values)
+        print(values)
 
         if not self.configured:
             self._configure(values)
@@ -166,7 +166,7 @@ class PrinterControl(Widget, StackLayout):
             self.ids['nozzle_temp'].text = "{:.0f} / {:.0f}".format(values['nozzle'][0]['actual'],
                                                                     values['nozzle'][0]['target'])
             self.popup.ids['detail_nozzle'].text = self.ids['nozzle_temp'].text
-        if values['bed']:
+        if values['bed'] and values['bed']['actual'] != '' and values['bed']['target'] != '' :
             self.ids['bed_temp'].text = "{:.0f} / {:.0f}".format(values['bed']['actual'], values['bed']['target'])
             self.popup.ids['detail_bed'].text = self.ids['bed_temp'].text
 
