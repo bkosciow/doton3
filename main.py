@@ -25,6 +25,7 @@ from view.weather_humidity import WeatherHumidity
 from view.weather_temperature import WeatherTemperature
 from view.circular_progress_bar import CircularProgressBar
 from view.power_socket import PowerSocket
+from widget.pc_monitoring import PCMonitoring
 from widget.home import Home
 from widget.air_quality import AirQuality
 from widget.weather import Weather
@@ -77,6 +78,9 @@ class DotonApp(App):
 
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
 
+        pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
+        layout.add_widget(pcmonitoring1)
+
         layout.add_widget(home)
         layout.add_widget(air_quality)
         layout.add_widget(weather)
@@ -124,6 +128,8 @@ class DotonApp(App):
         # listener.add_widget('node-relaybox2', power5plus)
         listener.add_widget('node-relaybox2', box2Light2)
         # listener.add_widget('node-fake1', fake1)
+
+        listener.add_widget('pc-node', pcmonitoring1)
         listener.start()
 
         return layout

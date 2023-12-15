@@ -1,0 +1,69 @@
+#kivy 2.0
+
+<PCMonitoring>
+    orientation: 'lr-tb'
+    size_hint: (None, None)
+    pos: 0, 0
+    size: 170, 110
+    text_color: 1, 1, 1, 1
+    warning_color: 1, 0, 0, 1
+    cpu_temperature: 0
+    cpu_warning_temperature: 85
+    gpu_temperature: 0
+    gpu_warning_temperature: 85
+    cpu_load: 0
+    gpu_load: 0
+    load_warning: 93
+    Label:
+        id: name
+        text: "- - -"
+        size_hint: 1, 0.2
+        bold: 1
+        font_size: 22
+    Label:
+        text: ""
+        size_hint: 1, 0.1
+        bold: 1
+        font_size: 20
+    Image:
+        size_hint: 0.2, 0.2
+        source: 'assets/image/pc/cpu.png'
+    Label:
+        id: cpu_temperature
+        text: str(self.parent.cpu_temperature) + "C"
+        size_hint:0.4, 0.2
+        bold: 1
+        font_size: 22
+        color: self.parent.text_color if self.parent.cpu_temperature < self.parent.cpu_warning_temperature else self.parent.warning_color
+    Label:
+        id: cpu_load
+        text: str(self.parent.cpu_load) + "%"
+        size_hint:0.4, 0.2
+        bold: 1
+        font_size: 22
+        color: self.parent.text_color if self.parent.cpu_load < self.parent.load_warning else self.parent.warning_color
+
+    Label:
+        text: ""
+        size_hint: 1, 0.1
+        bold: 1
+        font_size: 20
+
+    Image:
+        size_hint: 0.2, 0.2
+        source: 'assets/image/pc/gpu.png'
+    Label:
+        id: gpu_temperature
+        text: str(self.parent.gpu_temperature) + "C"
+        size_hint:0.4, 0.2
+        bold: 1
+        font_size: 22
+        color: self.parent.text_color if self.parent.gpu_temperature < self.parent.gpu_warning_temperature else self.parent.warning_color
+
+    Label:
+        id: gpu_load
+        text: str(self.parent.gpu_load) + "%"
+        size_hint:0.4, 0.2
+        bold: 1
+        font_size: 22
+        color: self.parent.text_color if self.parent.gpu_load < self.parent.load_warning else self.parent.warning_color
