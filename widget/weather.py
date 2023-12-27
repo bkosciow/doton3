@@ -3,12 +3,18 @@ from kivy.lang import Builder
 import pathlib
 from service.widget import Widget
 from datetime import datetime, timedelta
+from service.widget import FreshData
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'weather3.kv')
 
 
-class Weather(Widget, StackLayout):
+class Weather(Widget, StackLayout, FreshData):
     forecast_days = [0, 1, 2, 3]
+
+    def __init__(self, **kwargs):
+        super(StackLayout, self).__init__(**kwargs)
+        super(FreshData, self).__init__()
+        self.data_ttl = 60*10
 
     def update_values(self, values, name):
         # print(values, name)
@@ -46,6 +52,7 @@ class Weather(Widget, StackLayout):
                         self.ids[base_id + "_temperature_max"].text = str(normalized_values['temperature_max'])
                     if base_id + "_temperature_min" in self.ids:
                         self.ids[base_id + "_temperature_min"].text = str(normalized_values['temperature_min'])
+        self.got_data()
 
     def _normalize_values(self, values):
         for name in values:

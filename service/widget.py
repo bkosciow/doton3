@@ -1,6 +1,7 @@
 """An abstract for Widget class"""
 import abc
 import time
+import time
 
 
 class Widget:
@@ -36,3 +37,9 @@ class FreshData:
     def enable_widget(self):
         self.is_data_fresh = True
         self.disabled = False
+
+    def is_fresh(self):
+        if self.is_data_fresh and self.last_tick + self.data_ttl < time.time():
+            return False
+
+        return True

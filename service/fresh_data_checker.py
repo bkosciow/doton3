@@ -21,6 +21,6 @@ class FreshDataChecker:
 
     def check(self, dt):
         for item in self.widgets:
-            if item.is_data_fresh and item.last_tick + item.data_ttl < time.time():
+            if not item.is_fresh():
                 Logger.warning("No data for: " + str(item))
                 item.disable_widget()

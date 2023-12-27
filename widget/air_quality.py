@@ -2,19 +2,21 @@ from kivy.uix.stacklayout import StackLayout
 from kivy.lang import Builder
 import pathlib
 from service.widget import Widget
+from service.widget import FreshData
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'air_quality.kv')
 
 
-class AirQuality(Widget, StackLayout):
+class AirQuality(Widget, StackLayout, FreshData):
     def __init__(self, **kwargs):
         self.group = kwargs['group'] if 'group' in kwargs else None
         if self.group:
             del(kwargs['group'])
         super(StackLayout, self).__init__(**kwargs)
+        super(FreshData, self).__init__()
+        self.data_ttl = 60*15
 
     def update_values(self, values, name):
-        # print(values, name)
         current = {
             'PM25': None,
             'PM10': None,
@@ -40,3 +42,5 @@ class AirQuality(Widget, StackLayout):
                     self.ids[name + "_" + str(i)].enabled = 1
                 else:
                     self.ids[name + "_" + str(i)].enabled = 0
+
+        self.got_data()
