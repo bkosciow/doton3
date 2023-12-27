@@ -17,7 +17,8 @@ class FreshDataChecker:
     def add_from_listener(self, listener):
         for name in listener.widgets:
             for item in listener.widgets[name]:
-                self.add(item)
+                if item not in self.widgets:
+                    self.add(item)
 
     def check(self, dt):
         for item in self.widgets:

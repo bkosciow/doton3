@@ -6,12 +6,15 @@ from kivy.uix.boxlayout import BoxLayout
 from widget.relay_switch import RelaySwitch
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
+from service.widget import FreshData
 
 
-class Room(LabelBorder):
+class Room(LabelBorder, FreshData):
     def __init__(self, **kwargs):
         super(LabelBorder, self).__init__(**kwargs)
+        super(FreshData, self).__init__()
         self.popup = None
+        self.data_ttl = 20
 
     def _create_popup(self, detected):
         content = StackLayout()
