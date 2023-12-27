@@ -1,5 +1,4 @@
 from service.widget import FreshData
-import time
 from kivy.logger import Logger
 
 
