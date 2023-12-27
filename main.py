@@ -33,11 +33,14 @@ from widget.printer_3d import Printer3D
 from widget.printer_control import PrinterControl
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
+from service.fresh_data_checker import FreshDataChecker
+from kivy.logger import Logger
+
 
 config = Config()
 comm.address = (config.get("message.ip"), int(config.get("message.port")))
 listener = Listener(config.get('socket.address'))
-
+data_checker = FreshDataChecker()
 
 class DotonApp(App):
     def build(self):
@@ -47,10 +50,6 @@ class DotonApp(App):
         # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
         air_quality = AirQuality(pos=(0, 350))
         weather = Weather(pos=(220, 290))
-
-        # cr6se = Printer3D(pos=(0, 200), printer_name='CR6SE')
-        # ender5pro = Printer3D(pos=(110, 200), printer_name='E5PRO')
-        # ender5plus = Printer3D(pos=(0, 50), printer_name='E5+')
 
         def completed_e5pro():
             message = {
@@ -70,10 +69,6 @@ class DotonApp(App):
         upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
         lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
 
-        # power5pro = RelaySwitch(pos=(610, 0), text='5pro', node_name='node-printers', channel=1, confirm=True)
-        # powerCr6se = RelaySwitch(pos=(700, 0), text='6se', node_name='node-printers', channel=0, confirm=True)
-
-        #power5plus = RelaySwitch(pos=(520, 0), text='5plus', node_name='node-relaybox2', channel=2, confirm=True)
         box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
 
         # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
@@ -84,21 +79,14 @@ class DotonApp(App):
         layout.add_widget(home)
         layout.add_widget(air_quality)
         layout.add_widget(weather)
-        # layout.add_widget(cr6se)
-        # layout.add_widget(ender5pro)
-        # layout.add_widget(ender5plus)
         layout.add_widget(lowerLight)
         layout.add_widget(upperLight)
-        # layout.add_widget(power5pro)
 
         layout.add_widget(octo_e5pro)
         layout.add_widget(octo_e5plus)
         layout.add_widget(octo_cr6se)
 
-        # layout.add_widget(powerCr6se)
-        # layout.add_widget(power5plus)
         layout.add_widget(box2Light2)
-        # layout.add_widget(fake1)
 
         listener.add_widget('node-kitchen', home)
         listener.add_widget('node-living', home)
@@ -111,14 +99,10 @@ class DotonApp(App):
 
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
-        # listener.add_widget('node-ce6cr', cr6se)
-        # listener.add_widget('node-ender5pro', ender5pro)
 
         listener.add_widget('3dprinters', octo_e5pro)
         listener.add_widget('3dprinters', octo_e5plus)
         listener.add_widget('3dprinters', octo_cr6se)
-
-        # listener.add_widget('node-ender5plus', ender5plus)
 
         listener.add_widget('node-printers', lowerLight)
         listener.add_widget('node-printers', upperLight)
@@ -132,11 +116,14 @@ class DotonApp(App):
         listener.add_widget('pc-node', pcmonitoring1)
         listener.start()
 
+        data_checker.add_from_listener(listener)
+        Clock.schedule_interval(data_checker.check, 4)
+
         return layout
         # Clock.schedule_interval(home.update, 5.0)
 
     def on_request_close(self, *args):
-        print("HALTING")
+        Logger.info("Halting")
         listener.stop()
         listener.join()
         return True
@@ -144,6 +131,4 @@ class DotonApp(App):
 
 if __name__ == '__main__':
     DotonApp().run()
-
-
 

@@ -97,11 +97,18 @@
             y: 10
     Room:
         id: living
+        node_names: "node-living",
         text: '00\n00'
         size_hint: 0.45, 0.6
         border_width: 2
         font_size: 20
         bold: 1
+        PowerSocket:
+            label: "Socket"
+            node_name: "node-living"
+            id: node-living-relay-0
+            x: 2
+            y: 10
 
     Room:
         id: toilet
