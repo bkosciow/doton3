@@ -57,11 +57,10 @@ class PrinterControl(Widget, StackLayout):
         self.callbacks[name] = fun
 
     def update_values(self, values, name):
-        if self.node_name not in values:
+        if self.node_name != name:
             return
 
-        values = values[self.node_name]
-
+        # print(name, values["print"])
         if not self.configured:
             self._configure(values)
 
@@ -169,6 +168,9 @@ class PrinterControl(Widget, StackLayout):
             self.popup.ids['detail_bed'].text = self.ids['bed_temp'].text
 
     def on_touch_down(self, touch):
+        if not self.configured:
+            return
+
         if self.collide_point(*touch.pos):
             if self.timer:
                 Clock.unschedule(self.timer)
@@ -191,5 +193,5 @@ class PrinterControl(Widget, StackLayout):
             return False
         self.timer_tick -= 1
         self.ids['status'].text = str(self.timer_tick)
-        return True
 
+        return True

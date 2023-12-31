@@ -21,7 +21,7 @@ class CommunicationMessages:
             'parameters': {
                 'node_name': node_name
             },
-            'event': "octoprint.get_filelist"
+            'event': "octoprint.get_filelist",
         }
 
     def start_print(self, selected_path, node_name):
@@ -30,7 +30,7 @@ class CommunicationMessages:
                 'node_name': node_name,
                 'path': selected_path
             },
-            'event': "octoprint.print_start"
+            'event': "octoprint.print_start",
         }
 
     def stop_print(self, node_name):
@@ -38,7 +38,7 @@ class CommunicationMessages:
             'parameters': {
                 'node_name': node_name,
             },
-            'event': "octoprint.print_stop"
+            'event': "octoprint.print_stop",
         }
 
     def pause_print(self, node_name):
@@ -46,7 +46,7 @@ class CommunicationMessages:
             'parameters': {
                 'node_name': node_name,
             },
-            'event': "octoprint.print_pause"
+            'event': "octoprint.print_pause",
         }
 
     def resume_print(self, node_name):
@@ -54,5 +54,5 @@ class CommunicationMessages:
             'parameters': {
                 'node_name': node_name,
             },
-            'event': "octoprint.print_resume"
+            'event': "octoprint.print_resume",
         }

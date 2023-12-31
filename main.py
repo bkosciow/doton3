@@ -63,7 +63,7 @@ class DotonApp(App):
 
         octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
         octo_e5pro.add_callback('shutdown', completed_e5pro)
-        octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
+        # octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
         octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
 
         upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
@@ -84,7 +84,7 @@ class DotonApp(App):
 
         layout.add_widget(octo_e5pro)
         layout.add_widget(octo_e5plus)
-        layout.add_widget(octo_cr6se)
+        # layout.add_widget(octo_cr6se)
 
         layout.add_widget(box2Light2)
 
@@ -100,9 +100,10 @@ class DotonApp(App):
         listener.add_widget('openweather', weather)
         listener.add_widget('openaq', air_quality)
 
-        listener.add_widget('3dprinters', octo_e5pro)
-        listener.add_widget('3dprinters', octo_e5plus)
-        listener.add_widget('3dprinters', octo_cr6se)
+        listener.add_widget('ender5pro', octo_e5pro)
+        listener.add_widget('ender5plus', octo_e5plus)
+
+        # listener.add_widget('3dprinters', octo_cr6se)
 
         listener.add_widget('node-printers', lowerLight)
         listener.add_widget('node-printers', upperLight)
@@ -120,7 +121,6 @@ class DotonApp(App):
         Clock.schedule_interval(data_checker.check, 4)
 
         return layout
-        # Clock.schedule_interval(home.update, 5.0)
 
     def on_request_close(self, *args):
         Logger.info("Halting")
