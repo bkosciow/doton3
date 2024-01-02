@@ -2,6 +2,7 @@ import json
 from threading import Thread
 import socket
 import regex
+from kivy.logger import Logger
 
 
 class Listener(Thread):
@@ -62,18 +63,18 @@ class Listener(Thread):
                                 #     print(response[key])
                                 self._dispatch_data(key, response[key])
                         except ValueError as e:
-                            print("failed to unjonsonify")
-                            print(data)
-                            print(e)
+                            Logger.error("failed to unjonsonify")
+                            Logger.error(data)
+                            Logger.error(str(e))
                     else:
                         self.work = False
                         self.connection_error = True
 
             except socket.error as e:
-                print("socket crash")
+                Logger.error("socket crash")
                 self.work = False
                 self.connection_error = True
-                print(e)
+                Logger.error(str(e))
 
     def _initialize_values(self):
         self.socket.send("getall".encode())
@@ -88,6 +89,7 @@ class Listener(Thread):
 
     def stop(self):
         self.work = False
+        self.socket.close()
 
     def add_widget(self, name, widget):
         if name not in self.widgets:

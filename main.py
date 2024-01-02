@@ -1,6 +1,6 @@
 import kivy
 import random
-
+import signal
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
@@ -34,6 +34,7 @@ from widget.printer_control import PrinterControl
 from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 from service.fresh_data_checker import FreshDataChecker
+from kivy.app import App
 from kivy.logger import Logger
 
 
@@ -41,6 +42,18 @@ config = Config()
 comm.address = (config.get("message.ip"), int(config.get("message.port")))
 listener = Listener(config.get('socket.address'))
 data_checker = FreshDataChecker()
+
+
+def handler(signum, frame):
+    Logger.info("Stopping")
+    listener.stop()
+    listener.join()
+    App.get_running_app().stop()
+    exit(1)
+
+
+signal.signal(signal.SIGINT, handler)
+
 
 class DotonApp(App):
     def build(self):
@@ -123,9 +136,9 @@ class DotonApp(App):
         return layout
 
     def on_request_close(self, *args):
-        Logger.info("Halting")
         listener.stop()
         listener.join()
+
         return True
 
 
