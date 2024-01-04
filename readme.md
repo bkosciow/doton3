@@ -4,6 +4,9 @@ Doton3
 Doton3 project. 
 This time based on Kivy with HDMI display.
 
+- Python 3.10
+- Kivy 2.1.0
+
 
 [Articles](https://koscis.wordpress.com/tag/doton3/)
 

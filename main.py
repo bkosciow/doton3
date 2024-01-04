@@ -35,6 +35,7 @@ from widget.relay_switch import RelaySwitch
 from service.exceptions import *
 from service.fresh_data_checker import FreshDataChecker
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.logger import Logger
 
 
@@ -49,6 +50,7 @@ def handler(signum, frame):
     listener.stop()
     listener.join()
     App.get_running_app().stop()
+    Window.close()
     exit(1)
 
 
@@ -56,13 +58,79 @@ signal.signal(signal.SIGINT, handler)
 
 
 class DotonApp(App):
-    def build(self):
-        layout = FloatLayout(size=(800, 480))
 
-        home = Home(pos=(490, 280))
-        # air_quality = AirQuality(pos=(0, 250), group=['Bielsko-Biała, ul.Partyzantów'])
-        air_quality = AirQuality(pos=(0, 350))
-        weather = Weather(pos=(220, 290))
+    widget_counter = 0
+
+    def on_start(self):
+        Clock.schedule_interval(self.tick, 0.3)
+
+    def tick(self, dt):
+        if self.widget_counter == 0:
+            octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
+            self.layout.add_widget(octo_e5plus)
+            listener.add_widget('ender5plus', octo_e5plus)
+
+        if self.widget_counter == 3:
+            home = Home(pos=(490, 280))
+            self.layout.add_widget(home)
+            listener.add_widget('node-kitchen', home)
+            listener.add_widget('node-living', home)
+            listener.add_widget('node-north', home)
+            listener.add_widget('node-lib', home)
+            listener.add_widget('node-corridor', home)
+            listener.add_widget('node-toilet', home)
+            listener.add_widget('node-printers', home)
+            listener.add_widget('node-relaybox2', home)
+
+        if self.widget_counter == 1:
+            air_quality = AirQuality(pos=(0, 350))
+            self.layout.add_widget(air_quality)
+            listener.add_widget('openaq', air_quality)
+
+        if self.widget_counter == 2:
+            weather = Weather(pos=(220, 290))
+            self.layout.add_widget(weather)
+            listener.add_widget('openweather', weather)
+
+        if self.widget_counter == 4:
+            upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
+            self.layout.add_widget(upperLight)
+            listener.add_widget('node-printers', upperLight)
+
+            lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
+            self.layout.add_widget(lowerLight)
+            listener.add_widget('node-printers', lowerLight)
+
+            box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
+            self.layout.add_widget(box2Light2)
+            listener.add_widget('node-relaybox2', box2Light2)
+
+            pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
+            self.layout.add_widget(pcmonitoring1)
+            listener.add_widget('pc-node', pcmonitoring1)
+
+        if self.widget_counter == 5:
+            def completed_e5pro():
+                message = {
+                    'parameters': {
+                        'channel': 3,
+                    },
+                    'targets': ['node-relaybox2'],
+                    'event': "channel.off"
+                }
+                comm.send(message)
+            octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+            octo_e5pro.add_callback('shutdown', completed_e5pro)
+            self.layout.add_widget(octo_e5pro)
+            listener.add_widget('ender5pro', octo_e5pro)
+
+        if self.widget_counter == 6:
+            listener.start()
+
+        self.widget_counter += 1
+
+    def build(self):
+        self.layout = FloatLayout(size=(800, 480))
 
         def completed_e5pro():
             message = {
@@ -74,66 +142,23 @@ class DotonApp(App):
             }
             comm.send(message)
 
-        octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
-        octo_e5pro.add_callback('shutdown', completed_e5pro)
+        # octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+        # octo_e5pro.add_callback('shutdown', completed_e5pro)
+        # layout.add_widget(octo_e5pro)
+        # listener.add_widget('ender5pro', octo_e5pro)
+
         # octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
-        octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
-
-        upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
-        lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
-
-        box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
-
-        # fake1 = Printer3D(pos=(0, 10), printer_name='FAKE1')
-
-        pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
-        layout.add_widget(pcmonitoring1)
-
-        layout.add_widget(home)
-        layout.add_widget(air_quality)
-        layout.add_widget(weather)
-        layout.add_widget(lowerLight)
-        layout.add_widget(upperLight)
-
-        layout.add_widget(octo_e5pro)
-        layout.add_widget(octo_e5plus)
         # layout.add_widget(octo_cr6se)
+        # listener.add_widget('cr6se', octo_cr6se)
 
-        layout.add_widget(box2Light2)
-
-        listener.add_widget('node-kitchen', home)
-        listener.add_widget('node-living', home)
-        listener.add_widget('node-north', home)
-        listener.add_widget('node-lib', home)
-        listener.add_widget('node-corridor', home)
-        listener.add_widget('node-toilet', home)
-        listener.add_widget('node-printers', home)
-        listener.add_widget('node-relaybox2', home)
-
-        listener.add_widget('openweather', weather)
-        listener.add_widget('openaq', air_quality)
-
-        listener.add_widget('ender5pro', octo_e5pro)
-        listener.add_widget('ender5plus', octo_e5plus)
-
-        # listener.add_widget('3dprinters', octo_cr6se)
-
-        listener.add_widget('node-printers', lowerLight)
-        listener.add_widget('node-printers', upperLight)
-        # listener.add_widget('node-printers', power5pro)
-        # listener.add_widget('node-printers', powerCr6se)
-
-        # listener.add_widget('node-relaybox2', power5plus)
-        listener.add_widget('node-relaybox2', box2Light2)
-        # listener.add_widget('node-fake1', fake1)
-
-        listener.add_widget('pc-node', pcmonitoring1)
-        listener.start()
+        # octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
+        # layout.add_widget(octo_e5plus)
+        # listener.add_widget('ender5plus', octo_e5plus)
 
         data_checker.add_from_listener(listener)
         Clock.schedule_interval(data_checker.check, 4)
 
-        return layout
+        return self.layout
 
     def on_request_close(self, *args):
         listener.stop()

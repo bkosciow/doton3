@@ -9,6 +9,7 @@ from pprint import pprint
 from kivy.clock import Clock
 from printer.settings_model import Settings
 from printer.detail_popup import DetailPopup
+from kivy.clock import mainthread
 
 Builder.load_file(str(pathlib.Path(__file__).parent.absolute()) + pathlib.os.sep + 'printer_control.kv')
 
@@ -56,6 +57,7 @@ class PrinterControl(Widget, StackLayout):
             raise Exception('PrinterControl callback not found')
         self.callbacks[name] = fun
 
+    @mainthread
     def update_values(self, values, name):
         if self.node_name != name:
             return
@@ -92,7 +94,6 @@ class PrinterControl(Widget, StackLayout):
             self.popup.status = STATUS_UNKNOWN
 
         self.popup.change_panel('detail_status_'+self.popup.status)
-        # self.popup.ids['detail_status_tabs'].switch_to(self.popup.ids['detail_status_work'])
 
     def _update_error_data(self, values):
         if self.printing == 1:
@@ -123,6 +124,7 @@ class PrinterControl(Widget, StackLayout):
         paused = True if 'flags' in values and (('paused' in values['flags'] and values['flags']['paused']) or ('pausing' in values['flags'] and values['flags']['pausing'])) else False
         if (values['print'] == '' or values['print'] == {}) and not paused:
             self.printing = 0
+            self.popup.title = self.printer_name
         else:
             if 'flags' in values:
                 if values['flags']['printing']:

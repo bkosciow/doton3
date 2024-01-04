@@ -1,0 +1,12 @@
+certifi==2023.11.17
+charset-normalizer==3.3.2
+idna==3.6
+iot-message==1.2.1
+Kivy==2.1.0
+Kivy-Garden==0.1.5
+pillow==10.2.0
+pycryptodome==3.19.1
+Pygments==2.17.2
+regex==2023.12.25
+requests==2.31.0
+urllib3==2.1.0
