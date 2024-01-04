@@ -60,78 +60,56 @@ signal.signal(signal.SIGINT, handler)
 class DotonApp(App):
 
     widget_counter = 0
+    initialized = False
 
     def on_start(self):
         Clock.schedule_interval(self.tick, 0.3)
 
-    def tick(self, dt):
-        if self.widget_counter == 0:
-            octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
-            self.layout.add_widget(octo_e5plus)
-            listener.add_widget('ender5plus', octo_e5plus)
+    def step_0(self):
+        octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
+        self.layout.add_widget(octo_e5plus)
+        listener.add_widget('ender5plus', octo_e5plus)
 
-        if self.widget_counter == 3:
-            home = Home(pos=(490, 280))
-            self.layout.add_widget(home)
-            listener.add_widget('node-kitchen', home)
-            listener.add_widget('node-living', home)
-            listener.add_widget('node-north', home)
-            listener.add_widget('node-lib', home)
-            listener.add_widget('node-corridor', home)
-            listener.add_widget('node-toilet', home)
-            listener.add_widget('node-printers', home)
-            listener.add_widget('node-relaybox2', home)
+    def step_1(self):
+        air_quality = AirQuality(pos=(0, 350))
+        self.layout.add_widget(air_quality)
+        listener.add_widget('openaq', air_quality)
 
-        if self.widget_counter == 1:
-            air_quality = AirQuality(pos=(0, 350))
-            self.layout.add_widget(air_quality)
-            listener.add_widget('openaq', air_quality)
+    def step_2(self):
+        weather = Weather(pos=(220, 290))
+        self.layout.add_widget(weather)
+        listener.add_widget('openweather', weather)
 
-        if self.widget_counter == 2:
-            weather = Weather(pos=(220, 290))
-            self.layout.add_widget(weather)
-            listener.add_widget('openweather', weather)
+    def step_3(self):
+        home = Home(pos=(490, 280))
+        self.layout.add_widget(home)
+        listener.add_widget('node-kitchen', home)
+        listener.add_widget('node-living', home)
+        listener.add_widget('node-north', home)
+        listener.add_widget('node-lib', home)
+        listener.add_widget('node-corridor', home)
+        listener.add_widget('node-toilet', home)
+        listener.add_widget('node-printers', home)
+        listener.add_widget('node-relaybox2', home)
 
-        if self.widget_counter == 4:
-            upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
-            self.layout.add_widget(upperLight)
-            listener.add_widget('node-printers', upperLight)
+    def step_4(self):
+        upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
+        self.layout.add_widget(upperLight)
+        listener.add_widget('node-printers', upperLight)
 
-            lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
-            self.layout.add_widget(lowerLight)
-            listener.add_widget('node-printers', lowerLight)
+        lowerLight = RelaySwitch(pos=(610, 170), text='down', node_name='node-printers', channel=2)
+        self.layout.add_widget(lowerLight)
+        listener.add_widget('node-printers', lowerLight)
 
-            box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
-            self.layout.add_widget(box2Light2)
-            listener.add_widget('node-relaybox2', box2Light2)
+        box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
+        self.layout.add_widget(box2Light2)
+        listener.add_widget('node-relaybox2', box2Light2)
 
-            pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
-            self.layout.add_widget(pcmonitoring1)
-            listener.add_widget('pc-node', pcmonitoring1)
+        pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
+        self.layout.add_widget(pcmonitoring1)
+        listener.add_widget('pc-node', pcmonitoring1)
 
-        if self.widget_counter == 5:
-            def completed_e5pro():
-                message = {
-                    'parameters': {
-                        'channel': 3,
-                    },
-                    'targets': ['node-relaybox2'],
-                    'event': "channel.off"
-                }
-                comm.send(message)
-            octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
-            octo_e5pro.add_callback('shutdown', completed_e5pro)
-            self.layout.add_widget(octo_e5pro)
-            listener.add_widget('ender5pro', octo_e5pro)
-
-        if self.widget_counter == 6:
-            listener.start()
-
-        self.widget_counter += 1
-
-    def build(self):
-        self.layout = FloatLayout(size=(800, 480))
-
+    def step_5(self):
         def completed_e5pro():
             message = {
                 'parameters': {
@@ -142,20 +120,37 @@ class DotonApp(App):
             }
             comm.send(message)
 
-        # octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
-        # octo_e5pro.add_callback('shutdown', completed_e5pro)
-        # layout.add_widget(octo_e5pro)
-        # listener.add_widget('ender5pro', octo_e5pro)
+        octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+        octo_e5pro.add_callback('shutdown', completed_e5pro)
+        self.layout.add_widget(octo_e5pro)
+        listener.add_widget('ender5pro', octo_e5pro)
 
-        # octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
-        # layout.add_widget(octo_cr6se)
-        # listener.add_widget('cr6se', octo_cr6se)
+    def step_6(self):
+        return
+        octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
+        self.layout.add_widget(octo_cr6se)
+        listener.add_widget('cr6se', octo_cr6se)
 
-        # octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
-        # layout.add_widget(octo_e5plus)
-        # listener.add_widget('ender5plus', octo_e5plus)
+    def tick(self, dt):
+        if self.initialized:
+            return
 
-        data_checker.add_from_listener(listener)
+        name = "step_" + str(self.widget_counter)
+        step = getattr(self, name, None)
+        if step:
+            Logger.info("Executing "+name)
+            step()
+        else:
+            Logger.info("Starting listener ")
+            listener.start()
+            data_checker.add_from_listener(listener)
+            self.initialized = True
+
+        self.widget_counter += 1
+
+    def build(self):
+        self.layout = FloatLayout(size=(800, 480))
+
         Clock.schedule_interval(data_checker.check, 4)
 
         return self.layout
@@ -169,4 +164,3 @@ class DotonApp(App):
 
 if __name__ == '__main__':
     DotonApp().run()
-
