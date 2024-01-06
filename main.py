@@ -126,7 +126,6 @@ class DotonApp(App):
         listener.add_widget('ender5pro', octo_e5pro)
 
     def step_6(self):
-        return
         octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
         self.layout.add_widget(octo_cr6se)
         listener.add_widget('cr6se', octo_cr6se)
@@ -138,10 +137,10 @@ class DotonApp(App):
         name = "step_" + str(self.widget_counter)
         step = getattr(self, name, None)
         if step:
-            Logger.info("Executing "+name)
+            Logger.info("Main: Executing "+name)
             step()
         else:
-            Logger.info("Starting listener ")
+            Logger.info("Main: Starting listener ")
             listener.start()
             data_checker.add_from_listener(listener)
             self.initialized = True

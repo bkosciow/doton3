@@ -3,6 +3,7 @@ from threading import Thread
 import socket
 import regex
 from kivy.logger import Logger
+import time
 
 
 class Listener(Thread):
@@ -17,9 +18,9 @@ class Listener(Thread):
         self._connect()
 
     def _connect(self):
+        Logger.info("Listener: Connecting to " + self.address)
         (addr, port) = self.address.split(":")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # host = socket.gethostname()
         self.socket.connect((addr, int(port)))
 
     def _recv(self):
@@ -58,23 +59,35 @@ class Listener(Thread):
                             data = self._decode_data(data)
                             for response in data:
                                 key = list(response)[0]
-                                # print(key)
-                                # if key == 'octoprint':
-                                #     print(response[key])
                                 self._dispatch_data(key, response[key])
                         except ValueError as e:
                             Logger.error("failed to unjonsonify")
                             Logger.error(data)
                             Logger.error(str(e))
                     else:
-                        self.work = False
                         self.connection_error = True
+                        if self.work:
+                            self._reconnect()
+                        # self.work = False
 
             except socket.error as e:
                 Logger.error("socket crash")
-                self.work = False
                 self.connection_error = True
+                if self.work:
+                    self._reconnect()
+                # self.work = False
                 Logger.error(str(e))
+
+    def _reconnect(self):
+        Logger.info("Listener: Connection lost, reconnecting")
+        time.sleep(1)
+        try:
+            self._connect()
+            Logger.info("Listener: Connection restored")
+            time.sleep(1)
+            self._initialize_values()
+        except ConnectionRefusedError:
+            time.sleep(2)
 
     def _initialize_values(self):
         self.socket.send("getall".encode())
