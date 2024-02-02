@@ -14,6 +14,7 @@
     cpu_load: 0
     gpu_load: 0
     load_warning: 93
+    show_gpu: True
     Label:
         id: name
         text: "- - -"
@@ -53,6 +54,7 @@
     Image:
         size_hint: 0.2, 0.2
         source: 'assets/image/pc/gpu.png'
+        opacity: 1 if self.parent.show_gpu else 0
     Label:
         id: gpu_temperature
         text: str(self.parent.gpu_temperature) + "C"
@@ -60,7 +62,7 @@
         bold: 1
         font_size: 22
         color: self.parent.text_color if self.parent.gpu_temperature < self.parent.gpu_warning_temperature else self.parent.warning_color
-
+        opacity: 1 if self.parent.show_gpu else 0
     Label:
         id: gpu_load
         text: str(self.parent.gpu_load) + "%"
@@ -68,3 +70,4 @@
         bold: 1
         font_size: 22
         color: self.parent.text_color if self.parent.gpu_load < self.parent.load_warning else self.parent.warning_color
+        opacity: 1 if self.parent.show_gpu else 0

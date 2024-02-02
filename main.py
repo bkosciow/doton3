@@ -1,3 +1,5 @@
+import time
+
 import kivy
 import random
 import signal
@@ -101,13 +103,20 @@ class DotonApp(App):
         self.layout.add_widget(lowerLight)
         listener.add_widget('node-printers', lowerLight)
 
+    def step_7(self):
         box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
         self.layout.add_widget(box2Light2)
         listener.add_widget('node-relaybox2', box2Light2)
 
-        pcmonitoring1 = PCMonitoring(pos=(0, 220), name="PC Hone")
+    def step_8(self):
+        pcmonitoring1 = PCMonitoring(pos=(0, 225), name="PC Hone")
         self.layout.add_widget(pcmonitoring1)
         listener.add_widget('pc-node', pcmonitoring1)
+
+        pcmonitoring2 = PCMonitoring(pos=(0, 120), name="TinyPC")
+        pcmonitoring2.show_gpu = False
+        self.layout.add_widget(pcmonitoring2)
+        listener.add_widget('tinypc-node', pcmonitoring2)
 
     def step_5(self):
         def completed_e5pro():
@@ -139,6 +148,7 @@ class DotonApp(App):
         if step:
             Logger.info("Main: Executing "+name)
             step()
+            time.sleep(0.5)
         else:
             Logger.info("Main: Starting listener ")
             listener.start()
