@@ -108,6 +108,10 @@ class DotonApp(App):
         self.layout.add_widget(box2Light2)
         listener.add_widget('node-relaybox2', box2Light2)
 
+        # printer = RelaySwitch(pos=(430, 170), text='bro', node_name='node-relaybox2', channel=2)
+        # self.layout.add_widget(printer)
+        # listener.add_widget('node-relaybox2', printer)
+
     def step_8(self):
         pcmonitoring1 = PCMonitoring(pos=(0, 225), name="PC Hone")
         self.layout.add_widget(pcmonitoring1)
@@ -148,7 +152,7 @@ class DotonApp(App):
         if step:
             Logger.info("Main: Executing "+name)
             step()
-            time.sleep(0.5)
+            Clock.usleep(300)
         else:
             Logger.info("Main: Starting listener ")
             listener.start()
