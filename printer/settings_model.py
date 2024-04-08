@@ -5,4 +5,4 @@ class Settings:
         self.sort_values = ["default", "name"]
         self.shutdown_after_done = True
         self.shutdown_after_dc = True
-        self.shutdown_time = 60*6
+        self.shutdown_time = 60*5

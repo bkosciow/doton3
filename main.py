@@ -139,7 +139,17 @@ class DotonApp(App):
         listener.add_widget('ender5pro', octo_e5pro)
 
     def step_6(self):
+        def completed_cr6se():
+            message = {
+                'parameters': {
+                    'channel': 0,
+                },
+                'targets': ['node-printers'],
+                'event': "channel.off"
+            }
+            comm.send(message)
         octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
+        octo_cr6se.add_callback('shutdown', completed_cr6se)
         self.layout.add_widget(octo_cr6se)
         listener.add_widget('cr6se', octo_cr6se)
 
@@ -152,12 +162,13 @@ class DotonApp(App):
         if step:
             Logger.info("Main: Executing "+name)
             step()
-            Clock.usleep(300)
+            Clock.usleep(600)
         else:
+            self.initialized = True
             Logger.info("Main: Starting listener ")
+            Clock.usleep(1000)
             listener.start()
             data_checker.add_from_listener(listener)
-            self.initialized = True
 
         self.widget_counter += 1
 

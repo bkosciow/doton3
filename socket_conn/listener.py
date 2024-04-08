@@ -15,7 +15,7 @@ class Listener(Thread):
         self.connection_error = False
         self.pattern = regex.compile(r'\{(?:[^{}]|(?R))*\}')
         self.start_message = regex.compile(r'\d+:{')
-        self._connect()
+        #self._connect()
 
     def _connect(self):
         Logger.info("Listener: Connecting to " + self.address)
@@ -49,6 +49,7 @@ class Listener(Thread):
                 yield None
 
     def run(self):
+        self._connect()
         self._initialize_values()
         while self.work:
             try:
