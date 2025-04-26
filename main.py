@@ -114,13 +114,21 @@ class DotonApp(App):
 
     def step_8(self):
         pcmonitoring1 = PCMonitoring(pos=(0, 225), name="PC Hone")
+        pcmonitoring1.show_gpu = True
         self.layout.add_widget(pcmonitoring1)
         listener.add_widget('pc-node', pcmonitoring1)
 
-        pcmonitoring2 = PCMonitoring(pos=(0, 120), name="TinyPC")
-        pcmonitoring2.show_gpu = False
+        pcmonitoring2 = PCMonitoring(pos=(0, 130), name="TinyPC")
         self.layout.add_widget(pcmonitoring2)
         listener.add_widget('tinypc-node', pcmonitoring2)
+
+        pc3 = PCMonitoring(pos=(0, 60), name="Rem")
+        pc3.show_gpu = True
+        pc3.show_hdd1 = True
+        pc3.show_hdd2 = True
+        pc3.show_hdd3 = True
+        self.layout.add_widget(pc3)
+        listener.add_widget('rem-node', pc3)
 
     def step_5(self):
         def completed_e5pro():

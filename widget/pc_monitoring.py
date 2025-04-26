@@ -31,6 +31,17 @@ class PCMonitoring(Widget, StackLayout, FreshData):
         if 'gpu_load' in values:
             self.gpu_load = round(float(values['gpu_load']), 1)
             data = True
-
+        if 'hdd1_temperature' in values and values['hdd1_temperature']:
+            self.hdd1_temperature = round(float(values['hdd1_temperature']), 1)
+            data = True
+        if 'hdd2_temperature' in values and values['hdd2_temperature']:
+            self.hdd2_temperature = round(float(values['hdd2_temperature']), 1)
+            data = True
+        if 'hdd3_temperature' in values and values['hdd3_temperature']:
+            self.hdd3_temperature = round(float(values['hdd3_temperature']), 1)
+            data = True
+        if 'hdd4_temperature' in values and values['hdd4_temperature']:
+            self.hdd4_temperature = round(float(values['hdd4_temperature']), 1)
+            data = True
         if data:
             self.got_data()

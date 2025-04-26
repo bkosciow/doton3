@@ -13,18 +13,26 @@
     gpu_warning_temperature: 85
     cpu_load: 0
     gpu_load: 0
+    hdd1_temperature: 0
+    hdd2_temperature: 0
+    hdd3_temperature: 0
+    hdd4_temperature: 0
     load_warning: 93
-    show_gpu: True
+    show_gpu: False
+    show_hdd1: False
+    show_hdd2: False
+    show_hdd3: False
+    show_hdd4: False
     Label:
         id: name
         text: "- - -"
         size_hint: 1, 0.2
         bold: 1
-        font_size: 22
+        font_size: 20
         color: self.parent.text_color
     Label:
         text: ""
-        size_hint: 1, 0.1
+        size_hint: 1, 0.05
         bold: 1
         font_size: 20
     Image:
@@ -35,19 +43,19 @@
         text: str(self.parent.cpu_temperature) + "C"
         size_hint:0.4, 0.2
         bold: 1
-        font_size: 22
+        font_size: 20
         color: self.parent.text_color if self.parent.cpu_temperature < self.parent.cpu_warning_temperature else self.parent.warning_color
     Label:
         id: cpu_load
         text: str(self.parent.cpu_load) + "%"
         size_hint:0.4, 0.2
         bold: 1
-        font_size: 22
+        font_size: 20
         color: self.parent.text_color if self.parent.cpu_load < self.parent.load_warning else self.parent.warning_color
 
     Label:
         text: ""
-        size_hint: 1, 0.1
+        size_hint: 1, 0.05
         bold: 1
         font_size: 20
 
@@ -60,7 +68,7 @@
         text: str(self.parent.gpu_temperature) + "C"
         size_hint:0.4, 0.2
         bold: 1
-        font_size: 22
+        font_size: 20
         color: self.parent.text_color if self.parent.gpu_temperature < self.parent.gpu_warning_temperature else self.parent.warning_color
         opacity: 1 if self.parent.show_gpu else 0
     Label:
@@ -68,6 +76,34 @@
         text: str(self.parent.gpu_load) + "%"
         size_hint:0.4, 0.2
         bold: 1
-        font_size: 22
+        font_size: 20
         color: self.parent.text_color if self.parent.gpu_load < self.parent.load_warning else self.parent.warning_color
         opacity: 1 if self.parent.show_gpu else 0
+
+    Label:
+        id: hdd1_temp
+        text: str(self.parent.hdd1_temperature) + "C"
+        size_hint:0.5, 0.2
+        font_size: 20
+        opacity: 1 if self.parent.show_hdd1 else 0
+
+    Label:
+        id: hdd2_temp
+        text: str(self.parent.hdd2_temperature) + "C"
+        size_hint:0.5, 0.2
+        font_size: 20
+        opacity: 1 if self.parent.show_hdd2 else 0
+
+    Label:
+        id: hdd3_temp
+        text: str(self.parent.hdd3_temperature) + "C"
+        size_hint:0.5, 0.2
+        font_size: 20
+        opacity: 1 if self.parent.show_hdd3 else 0
+
+    Label:
+        id: hdd4_temp
+        text: str(self.parent.hdd4_temperature) + "C"
+        size_hint:0.5, 0.2
+        font_size: 20
+        opacity: 1 if self.parent.show_hdd4 else 0
