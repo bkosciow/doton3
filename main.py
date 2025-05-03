@@ -127,6 +127,7 @@ class DotonApp(App):
         pc3.show_hdd1 = True
         pc3.show_hdd2 = True
         pc3.show_hdd3 = True
+        pc3.show_hdd4 = True
         self.layout.add_widget(pc3)
         listener.add_widget('rem-node', pc3)
 
