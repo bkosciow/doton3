@@ -33,7 +33,7 @@ class RelaySwitch(Widget, StackLayout):
 
     def update_values(self, values, name):
         self.ids['device_name'].disabled = False
-        if 'relay' in values:
+        if 'relay' in values and self.channel in values['relay']:
             if values['relay'][self.channel] == 0:
                 self.state = 'down'
             else:

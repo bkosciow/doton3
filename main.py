@@ -65,7 +65,7 @@ class DotonApp(App):
     initialized = False
 
     def on_start(self):
-        Clock.schedule_interval(self.tick, 0.3)
+        Clock.schedule_interval(self.tick, 0.5)
 
     def step_0(self):
         octo_e5plus = PrinterControl(pos=(685, 3), printer_name='E5Plus', node_name='ender5plus')
@@ -93,6 +93,7 @@ class DotonApp(App):
         listener.add_widget('node-toilet', home)
         listener.add_widget('node-printers', home)
         listener.add_widget('node-relaybox2', home)
+        listener.add_widget('node-relaybox3', home)
 
     def step_4(self):
         upperLight = RelaySwitch(pos=(700, 170), text='top', node_name='node-printers', channel=3)
@@ -107,6 +108,22 @@ class DotonApp(App):
         box2Light2 = RelaySwitch(pos=(520, 170), text='box', node_name='node-relaybox2', channel=1)
         self.layout.add_widget(box2Light2)
         listener.add_widget('node-relaybox2', box2Light2)
+
+        # switch1 = RelaySwitch(pos=(430, 170), text="t1", node_name="node-relaybox3", channel=0)
+        # self.layout.add_widget(switch1)
+        # listener.add_widget('node-relaybox3', switch1)
+        #
+        # switch2 = RelaySwitch(pos=(340, 170), text="t2", node_name="node-relaybox3", channel=1)
+        # self.layout.add_widget(switch2)
+        # listener.add_widget('node-relaybox3', switch2)
+        #
+        # switch3 = RelaySwitch(pos=(250, 170), text="t3", node_name="node-relaybox3", channel=2)
+        # self.layout.add_widget(switch3)
+        # listener.add_widget('node-relaybox3', switch3)
+        #
+        # switch4 = RelaySwitch(pos=(250, 100), text="t4", node_name="node-relaybox3", channel=3)
+        # self.layout.add_widget(switch4)
+        # listener.add_widget('node-relaybox3', switch4)
 
         # printer = RelaySwitch(pos=(430, 170), text='bro', node_name='node-relaybox2', channel=2)
         # self.layout.add_widget(printer)
@@ -128,6 +145,7 @@ class DotonApp(App):
         pc3.show_hdd2 = True
         pc3.show_hdd3 = True
         pc3.show_hdd4 = True
+        pc3.show_hdd5 = True
         self.layout.add_widget(pc3)
         listener.add_widget('rem-node', pc3)
 
@@ -142,25 +160,26 @@ class DotonApp(App):
             }
             comm.send(message)
 
-        octo_e5pro = PrinterControl(pos=(445, 3), printer_name='E5pro', node_name='ender5pro')
+        octo_e5pro = PrinterControl(pos=(565, 3), printer_name='E5pro', node_name='ender5pro')
         octo_e5pro.add_callback('shutdown', completed_e5pro)
         self.layout.add_widget(octo_e5pro)
         listener.add_widget('ender5pro', octo_e5pro)
 
     def step_6(self):
-        def completed_cr6se():
-            message = {
-                'parameters': {
-                    'channel': 0,
-                },
-                'targets': ['node-printers'],
-                'event': "channel.off"
-            }
-            comm.send(message)
-        octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
-        octo_cr6se.add_callback('shutdown', completed_cr6se)
-        self.layout.add_widget(octo_cr6se)
-        listener.add_widget('cr6se', octo_cr6se)
+        pass
+        # def completed_cr6se():
+        #     message = {
+        #         'parameters': {
+        #             'channel': 0,
+        #         },
+        #         'targets': ['node-printers'],
+        #         'event': "channel.off"
+        #     }
+        #     comm.send(message)
+        # octo_cr6se = PrinterControl(pos=(565, 3), printer_name='CR6SE', node_name='cr6se')
+        # octo_cr6se.add_callback('shutdown', completed_cr6se)
+        # self.layout.add_widget(octo_cr6se)
+        # listener.add_widget('cr6se', octo_cr6se)
 
     def tick(self, dt):
         if self.initialized:
@@ -171,11 +190,11 @@ class DotonApp(App):
         if step:
             Logger.info("Main: Executing "+name)
             step()
-            Clock.usleep(600)
+            Clock.usleep(2000)
         else:
             self.initialized = True
             Logger.info("Main: Starting listener ")
-            Clock.usleep(1000)
+            Clock.usleep(5000)
             listener.start()
             data_checker.add_from_listener(listener)
 

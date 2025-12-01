@@ -87,7 +87,13 @@ class Listener(Thread):
             Logger.info("Listener: Connection restored")
             time.sleep(1)
             self._initialize_values()
-        except ConnectionRefusedError:
+        except ConnectionRefusedError as e:
+            Logger.error(str(e))
+            Logger.info('reconnecting...')
+            time.sleep(2)
+        except socket.error as e:
+            Logger.error(str(e))
+            Logger.info('reconnecting...')
             time.sleep(2)
 
     def _initialize_values(self):

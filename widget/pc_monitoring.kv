@@ -17,12 +17,14 @@
     hdd2_temperature: 0
     hdd3_temperature: 0
     hdd4_temperature: 0
+    hdd5_temperature: 0
     load_warning: 93
     show_gpu: False
     show_hdd1: False
     show_hdd2: False
     show_hdd3: False
     show_hdd4: False
+    show_hdd5: False
     Label:
         id: name
         text: "- - -"
@@ -83,27 +85,34 @@
     Label:
         id: hdd1_temp
         text: str(self.parent.hdd1_temperature) + "C"
-        size_hint:0.5, 0.2
-        font_size: 20
+        size_hint:0.33, 0.2
+        font_size: 18
         opacity: 1 if self.parent.show_hdd1 else 0
 
     Label:
         id: hdd2_temp
         text: str(self.parent.hdd2_temperature) + "C"
-        size_hint:0.5, 0.2
-        font_size: 20
+        size_hint:0.33, 0.2
+        font_size: 18
         opacity: 1 if self.parent.show_hdd2 else 0
 
     Label:
         id: hdd3_temp
         text: str(self.parent.hdd3_temperature) + "C"
-        size_hint:0.5, 0.2
-        font_size: 20
+        size_hint:0.33, 0.2
+        font_size: 18
         opacity: 1 if self.parent.show_hdd3 else 0
 
     Label:
         id: hdd4_temp
         text: str(self.parent.hdd4_temperature) + "C"
-        size_hint:0.5, 0.2
-        font_size: 20
+        size_hint:0.33, 0.2
+        font_size: 18
         opacity: 1 if self.parent.show_hdd4 else 0
+
+    Label:
+        id: hdd5_temp
+        text: str(self.parent.hdd5_temperature) + "C"
+        size_hint:0.33, 0.2
+        font_size: 18
+        opacity: 1 if self.parent.show_hdd5 else 0
