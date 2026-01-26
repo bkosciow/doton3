@@ -15,16 +15,20 @@ class Weather(Widget, StackLayout, FreshData):
         super(StackLayout, self).__init__(**kwargs)
         super(FreshData, self).__init__()
         self.data_ttl = 60*10
-        self.selected_city = '3103402'
+        self.selected_city = None
         self.data = {}
 
     def update_values(self, values, name):
         # print(values, name)
         if values:
+            if self.selected_city is None:
+                self.selected_city = list(values.keys())[0]
             self.data = values
             self.draw()
 
     def draw(self):
+        if self.selected_city is None:
+            return
         if self.selected_city in self.data:
             values = self.data[self.selected_city]
             # print(values['city'])
