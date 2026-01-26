@@ -18,7 +18,7 @@ class AirQuality(Widget, StackLayout, FreshData):
 
     def update_values(self, values, name):
         if values is not None:
-            print(name, values)
+            # print(name, values)
             current = {
                 'PM25': None,
                 'PM10': None,

@@ -3,7 +3,7 @@
 <Weather>
     orientation: 'lr-tb'
     size_hint: (None, None)
-    size: 250, 180
+    size: 250, 190
     pos: 0, 0
     canvas.before:
         Color:
@@ -22,7 +22,11 @@
             source: 'assets/image/openweather/rounded_big_box.png'
         Color:
             rgb: 1, 0, 0
-
+    Label:
+        id: city_name_label
+        size_hint: 1, 0.2
+        text: " no data "
+        font_size: 14
     ImageRotate:
         id: current_wind_icon
         size_hint: 0.10, 0.2
