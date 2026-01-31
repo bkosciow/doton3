@@ -81,13 +81,15 @@ class Weather(Widget, StackLayout, FreshData):
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
             current_city = self.selected_city
-            cities = list(self.data.keys())
-            try:
-                current_index = cities.index(current_city)
-            except ValueError:
-                current_index = -1
+            cities = [x for x in list(self.data.keys()) if x.isdigit()]
 
-            next_index = (current_index + 1) % len(cities)
+            if len(cities) == 0:
+                return
+
+            current_index = cities.index(current_city)
+            next_index = current_index + 1
+            if next_index >= len(cities):
+                next_index = 0
 
             self.selected_city = str(cities[next_index])
             self.draw()
