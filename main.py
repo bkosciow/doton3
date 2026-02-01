@@ -73,7 +73,7 @@ class DotonApp(App):
         listener.add_widget('ender5plus', octo_e5plus)
 
     def step_1(self):
-        air_quality = AirQuality(pos=(0, 350))
+        air_quality = AirQuality(pos=(0, 370))
         self.layout.add_widget(air_quality)
         listener.add_widget('openaq', air_quality)
 

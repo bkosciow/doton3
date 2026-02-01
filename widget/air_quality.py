@@ -15,10 +15,16 @@ class AirQuality(Widget, StackLayout, FreshData):
         super(StackLayout, self).__init__(**kwargs)
         super(FreshData, self).__init__()
         self.data_ttl = 60*15
+        self.selected_city = None
+        self.data = {}
 
-    def update_values(self, values, name):
-        if values is not None:
-            # print(name, values)
+    def draw(self):
+        print("dane ",self.data)
+        if self.selected_city is None:
+            return
+
+        if self.selected_city in self.data:
+            self.ids['city_name_label'].text = self.selected_city
             current = {
                 'PM25': None,
                 'PM10': None,
@@ -27,16 +33,14 @@ class AirQuality(Widget, StackLayout, FreshData):
                 'CO': None,
                 'NO2': None,
             }
-            for location in values:
-                if self.group is None or location in self.group:
-                    data = values[location]
-                    if isinstance(data, dict):
-                        for item in data:
-                            if data[item] is not None:
-                                if item in current and (
-                                        current[item] is None or current[item] < data[item]['index']):
-                                    current[item] = data[item]['index']
+            data = self.data[self.selected_city]
+            for item in data:
+                if data[item] is not None:
+                    if item in current and (
+                            current[item] is None or current[item] < data[item]['index']):
+                        current[item] = data[item]['index']
 
+            print("current: ",current)
             for k, v in current.items():
                 name = k.lower()
                 for i in range(0, 6):
@@ -44,5 +48,13 @@ class AirQuality(Widget, StackLayout, FreshData):
                         self.ids[name + "_" + str(i)].enabled = 1
                     else:
                         self.ids[name + "_" + str(i)].enabled = 0
+
+    def update_values(self, values, name):
+        if values is not None:
+            print(name, values)
+            if self.selected_city is None:
+                self.selected_city = list(values.keys())[0]
+            self.data = self.data | values
+            self.draw()
 
             self.got_data()
