@@ -75,7 +75,7 @@ class DotonApp(App):
     def step_1(self):
         air_quality = AirQuality(pos=(0, 370))
         self.layout.add_widget(air_quality)
-        listener.add_widget('openaq', air_quality)
+        listener.add_widget('air-quality', air_quality)
 
     def step_2(self):
         weather = Weather(pos=(220, 290))
