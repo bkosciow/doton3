@@ -43,8 +43,10 @@ class AirQuality(Widget, StackLayout, FreshData):
                 name = k.lower()
                 for i in range(0, 6):
                     if v is not None and i <= v:
+                        # print(name + "_" + str(i), " : ",self.ids[name + "_" + str(i)], " : 1")
                         self.ids[name + "_" + str(i)].enabled = 1
                     else:
+                        # print(name + "_" + str(i), " : ", self.ids[name + "_" + str(i)], " : 0")
                         self.ids[name + "_" + str(i)].enabled = 0
 
     def update_values(self, values, name):

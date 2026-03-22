@@ -66,6 +66,7 @@ class Listener(Thread):
                             Logger.error(data)
                             Logger.error(str(e))
                     else:
+                        Logger.error("NO data")
                         self.connection_error = True
                         if self.work:
                             self._reconnect()
@@ -83,6 +84,7 @@ class Listener(Thread):
         Logger.info("Listener: Connection lost, reconnecting")
         time.sleep(1)
         try:
+            # self.socket.close()
             self._connect()
             Logger.info("Listener: Connection restored")
             time.sleep(1)
@@ -108,6 +110,7 @@ class Listener(Thread):
         return response
 
     def stop(self):
+        Logger.error("closing socket")
         self.work = False
         self.socket.close()
 

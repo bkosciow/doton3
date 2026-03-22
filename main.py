@@ -50,7 +50,8 @@ data_checker = FreshDataChecker()
 def handler(signum, frame):
     Logger.info("Stopping")
     listener.stop()
-    listener.join()
+    #listener.join()
+    Logger.info("closing app")
     App.get_running_app().stop()
     Window.close()
     exit(1)
@@ -135,11 +136,12 @@ class DotonApp(App):
         self.layout.add_widget(pcmonitoring1)
         listener.add_widget('pc-node', pcmonitoring1)
 
-        pcmonitoring2 = PCMonitoring(pos=(0, 130), name="TinyPC")
+        pcmonitoring2 = PCMonitoring(pos=(0, 115), name="Tachikoma")
+        pcmonitoring2.show_gpu = True
         self.layout.add_widget(pcmonitoring2)
-        listener.add_widget('tinypc-node', pcmonitoring2)
+        listener.add_widget('tachikoma-node', pcmonitoring2)
 
-        pc3 = PCMonitoring(pos=(0, 60), name="Rem")
+        pc3 = PCMonitoring(pos=(0, 10), name="Rem")
         pc3.show_gpu = True
         pc3.show_hdd1 = True
         pc3.show_hdd2 = True
